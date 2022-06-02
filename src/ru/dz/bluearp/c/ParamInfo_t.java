@@ -30,5 +30,10 @@ public class ParamInfo_t {
 	{
 		
 	}
+
+	public void dump(int param) {
+		System.out.printf("\t%s = %d%s\n", name, param, suff);
+		
+	}
 	
 }

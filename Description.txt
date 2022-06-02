@@ -1,0 +1,92 @@
+fixp - fixed params, они на уровне банка. Вот этот блок
+// FIXED PARAMS (PATCH INDEPENDENT) ------------------------------------------------
+  {  0,     127,     1, patVer,    0,    0,    "PatchVer",                  0,  cInt8,  "" },   // 0: cPatchVer
+  { -1,      15,     1,     -1,   -1,    2,    "MIDI In Channel",           1,  cInt8,  "" },   // 1: cMIDIIn_Ch
+  {  0,      15,     1,      0,    0,    2,    "MIDI Out Channel",         16,  cInt8,  "" },   // 2: cMIDIOut_Ch
+  {  0,       5,     1,      0,    0,    2,    "MIDI In Port",             32,  cInt8,  "" },   // 3: cMIDIIn_Port  (patchVer16: cArpOn)
+  {  0,      13,     1,      0,    0,    2,    "MIDI Out Port",            33,  cInt8,  "" },   // 4: cMIDIOut_Port (patchVer16: cMidiThruOn)
+  {  0,       6,     1,      1,    0,    2,    "Arp Mode",                 28,  cInt8,  "" },   // 5: cArpMode
+  {  0,       0,     1,      0,    0,    2,    "",                          0,  cInt8,  "" },   // 6: - unused -
+  {  0,     120,     1,    120,    0,    2,    "NumPrograms",              -3,  cInt8,  "" },   // 7: cNumPrograms (ListIdx=-3 for special logic)
+  {  0,  maxPrg,     1,      0,   -1,    2,    "CurProgram",                0,  cInt8,  "" },   // 8: cCurProgram
+  {  0,  maxBar,     1,      3,    0,    2,    "SelectedBar",              39,  cInt8,  "" },   // 9: cSelectedBar
+// chain-related fixed params ------------------------------------------------------
+  {  1,  numChn,     1,      8,    8,    2,    "Num. chains",               0,  cInt8,  "" },   // 10: cNumChains
+  { -1,  maxChn,     1,     -1,   -1,    2,    "Cur_Chain",                21,  cInt8,  "" },   // 11: cCurChain (-1: no chain or "---")
+  {  0,       8,     1,      5,    5,    2,    "Chain quantize",            4,  cInt8,  "" },   // 12: cChainQuantize
+// GUI Options ---------------------------------------------------------------------
+  {  0,       1,     1,      0,    0,    2,    "Fine velocity adj.",        5,  cInt8,  "" },   // 13: cFineVelocity
+  {  0,       3,     1,      0,    0,    2,    "Semitone range",            6,  cInt8,  "" },   // 14: cScaleStepRange
+  {  0,       2,     1,      0,    0,    2,    "Prog.chng msg",             7,  cInt8,  "" },   // 15: cFltProgCC
+  {  0,       1,     1,      0,    0,    2,    "Input range mode",         22,  cInt8,  "" },   // 16: cInRangeTruncMode
+  {  0,       2,     1,      0,    0,    2,    "Output velo mode",         23,  cInt8,  "" },   // 17: cOutVeloMode
+  {  0,       2,     1,      0,    0,    2,    "Send bank msg",            24,  cInt8,  "" },   // 18: cSendBankMsg
+  {  0,       1,     1,      0,    0,    5,    "Chain restart on sw.",      2,  cInt8,  "" },   // 19: cChainRestart
+
+fpgp - это fixed program params, это некоторые параметры уровня program, но реально тоже на уровне банка хранятся. 
+Сделал так чтобы радикально структуру данных не переделывать
+
+Имеет ту же структуру что prgp
+
+// PROGRAM PARAMS --------------------------------------------------------------------
+  {  0,     127,     1, patVer,    0,    0,    "PatchVerProg",              0,  cInt8,  "" },   // 39: cPatchVerProg
+  {  0,      64,     1,     16,    0,    1,    "Steps",                     0,  cInt8,  "" },   // 40: cNumSteps
+  {  1,     125,     1,     90, -127,    1,    "Gate",                      0,  cInt8,  "%" },  // 41: cGate
+  {  0,      12,     1,      4, -127,    1,    "Sync",                      8,  cInt8,  "" },   // 42: cSync
+  {  0,       1,     1,      0,    0,    2,    "Latch",                     2,  cInt8,  "" },   // 43: cLatch
+  {  0,       4,     1,      0,    0,    1,    "Missing key subst.",        9,  cInt8,  "" },   // 44: cMissing_key
+  {  0,     127,     1,      0,    0,    5,    "Input range (low)",        -1,  cInt8,  "" },   // 45: cInRange_Low
+  {  0,     127,     1,    127,  127,    2,    "Input range (high)",       -1,  cInt8,  "" },   // 46: cInRange_High
+  {  0,     127,     1,      0,    0,    5,    "Output rng wrap (low)",    -1,  cInt8,  "" },   // 47: cOutRange_Low
+  {  0,     127,     1,    127,  127,    2,    "Output rng wrap (high)",   -1,  cInt8,  "" },   // 48: cOutRange_High
+  {  0,       7,     1,      0,    0,    1,    "Order algorithm",          10,  cInt8,  "" },   // 49: cKeyOrderAlgo
+  {  0,     127,     1,     64,   64,    1,    "Fixed key",                -1,  cInt8,  "" },   // 50: cFixedKey
+  { -3,       3,     1,      0,    0,    1,    "Master transpose oct",     11,  cInt8,  "" },   // 51: cMTranspose_Oct
+  {  0,       8,     1,      1,    1,    2,    "Input quantize",            4,  cInt8,  "" },   // 52: cInQuantize
+  {-12,      12,     1,      0,    0,    3,    "Master transpose semi",    12,  cInt8,  "" },   // 53: cMTranspose_Semi
+  {  0,       1,     1,      0,    0,    2,    "Page scroll",               2,  cInt8,  "" },   // 54: cAutoScroll
+  {-50,      50,     1,      0,    0,    1,    "Swing",                     0,  cInt8,  "%" },  // 55: cSwing
+  {  0,       3,     1,      0,    0,    2,    "Restart On",               13,  cInt8,  "" },   // 56: cRestartOn
+  {  0,      13,     1,      0,    0,    1,    "Force scale: key",         14,  cInt8,  "" },   // 57: cForceScale_Key
+  {  0,      14,     1,      0,    0,    1,    "Force scale: scale",       15,  cInt8,  "" },   // 58: cForceScale_Scale
+  {  0,       1,     1,      0,    0,    1,    "Force scale: mode",        25,  cInt8,  "" },   // 59: cForceScale_Mode
+  {  0,       1,     1,      0,    0,    0,    "Page lock",                 2,  cInt8,  "" },   // 60: cPageLock
+  {  0,  maxPag,     1,      0,    0,    0,    "Page selected",             0,  cInt8,  "" },   // 61: cSelectedPage
+  { -8,       8,     1,      0,    0,    0,    "Pattern shift",             0,  cInt8,  "" },   // 62: cPatternShift
+  {  0,     127,     1,      0,    0,    5,    "Input rng wrap (low)",     -1,  cInt8,  "" },   // 63: cInRangeWrap_Low
+  {  0,     127,     1,    127,  127,    2,    "Input rng wrap (high)",    -1,  cInt8,  "" },   // 64: cInRangeWrap_High
+  {  0,       1,     1,      0,    0,    1,    "Polyphonic octave",         2,  cInt8,  "" },   // 65: cPolyOctave
+  {  0,       1,     1,      0,    0,    1,    "Polyphonic key sel.",       2,  cInt8,  "" },   // 66: cPolyKeySel
+  {  0,       2,     1,      0,    0,    1,    "Missing key octave",       26,  cInt8,  "" },   // 67: cMissing_key_oct
+  {  0,       4,     1,      0,    0,    2,    "Selected layer",            0,  cInt8,  "" },   // 68: cSelectedLayer
+  {  0,       1,     1,      0,    0,    1,    "GATE lane mode",            0,  cInt8,  "" },   // 69: cGateLaneMode
+  {  0,     100,     1,      0,    0,    1,    "Randomize velocity",        0,  cInt8,  "%" },  // 70: cRandVelo
+  {  0,     100,     1,      0,    0,    1,    "Randomize gate per step",   0,  cInt8,  "%" },  // 71: cRandGate
+  {  0,     100,     1,      0,    0,    1,    "Randomize start time",      0,  cInt8,  "%" },  // 72: cRandStart
+  {  0,       1,     1,      0,    0,    2,    "Latch mode",               44,  cInt8,  "" },   // 73: cLatchMode
+  {  0,       1,     1,      1,    0,    2,    "Flt: PBend msg",           30,  cInt8,  "" },   // 74: cFltPBend
+  {  0,       1,     1,      1,    0,    2,    "Flt: MWheel msg",          30,  cInt8,  "" },   // 75: cFltMWheel
+  {  0,       1,     1,      1,    0,    2,    "Flt: ATouch msg",          30,  cInt8,  "" },   // 76: cFltATouch
+  {  0,       1,     1,      0,    0,    2,    "Flt: Other CC msg",        30,  cInt8,  "" },   // 77: cFltOtherCC
+  {  0,       3,     1,      3,    0,    2,    "Flt: Sustain msg",         40,  cInt8,  "" },   // 78: cFltSustain
+  {  0,       1,     1,      0,    0,    2,    "Sustain polarity",         43,  cInt8,  "" },   // 79: cFltSusPol
+  {-7,        7,     1,      0,    0,    1,    "Smart bend",                0,  cInt8,  "" },   // 80: cSmartBend
+
+chnp - chain params, для каждого chain
+// Chain-specific ------------------------------------------------------------------
+  {  0,       1,     1,      1,    0,    0,    "ChainInitFlag",             0,  cInt8,  "" },   // 20: cChainInitFlag
+  { -1,     127,     1,     -1,   -1,    4,    "SendPatchNum",              3,  cInt8,  "" },   // 21: cSendPatchNum
+  { -1,     127,     1,     -1,   -1,    4,    "SendBankNum",               3,  cInt8,  "" },   // 22: cSendBankNum
+  { -1,     127,     1,     -1,   -1,    4,    "SendVolume",                3,  cInt8,  "" },   // 23: cSendVolume
+  { -1,      18,     1,     -1,   -1,    4,    "Next_Chain",               31,  cInt8,  "" },   // 24: cNextChain (-1: "---")
+
+chns - chain steps, это вот эти параметры
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_01",             17,  cInt8,  "" },   // 31: cChainSeq[0]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_02",             17,  cInt8,  "" },   // 32: cChainSeq[1]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_03",             17,  cInt8,  "" },   // 33: cChainSeq[2]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_04",             17,  cInt8,  "" },   // 34: cChainSeq[3]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_05",             17,  cInt8,  "" },   // 35: cChainSeq[4]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_06",             17,  cInt8,  "" },   // 36: cChainSeq[5]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_07",             17,  cInt8,  "" },   // 37: cChainSeq[6]
+  { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_08",             17,  cInt8,  "" },   // 38: cChainSeq[7]
+  
