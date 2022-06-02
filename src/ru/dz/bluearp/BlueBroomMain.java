@@ -15,6 +15,7 @@ public class BlueBroomMain
 	//private static final String MIDI_FILE = "G:\\Projects\\BroomStickExtractor\\midi\\Disco_Octaves.mid";
 	//private static final String MIDI_FILE = "midi/Disco_Octaves.mid";
 	private static final String MIDI_FILE = "midi/Classic_Disco.mid";
+	private static final String FXP_FILE = "bluearp/BlueARP_FactoryBank.fxb";
 	
 	private static final boolean printDetails = true;
 	private static final boolean printOff = false;
@@ -44,10 +45,13 @@ public class BlueBroomMain
 	private static int n32PerBeat;
 
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception 
+	{
+		BlueFxp fxp = new BlueFxp();
+		fxp.load(FXP_FILE);
+		
 		Sequence sequence = MidiSystem.getSequence(new File(MIDI_FILE));
-
-		printSequence(sequence);
+		//printSequence(sequence);
 
 	}
 
@@ -140,15 +144,15 @@ public class BlueBroomMain
 		Message				Meta type	Data length	Contains	Occurs at
 		Sequence number		0x00	2 bytes		The number of a sequence											At delta time 0
 		Text				0x01	variable	Some text															Anywhere
-		Copyright notice	0x02	variable	A copyright notice						At delta time 0 in the first track
-		Track name			0x03	variable	A track name												At delta time 0
+		Copyright notice	0x02	variable	A copyright notice													At delta time 0 in the first track
+		Track name			0x03	variable	A track name														At delta time 0
 		Instrument name		0x04	variable	The name of an instrument in the current track						Anywhere
 		Lyrics				0x05	variable	Lyrics, usually a syllable per quarter note							Anywhere
 		Marker				0x06	variable	The text of a marker												Anywhere
 		Cue point			0x07	variable	The text of a cue, usually to prompt for some action from the user	Anywhere
 		Channel prefix		0x20	1 byte		A channel number (following meta events will apply to this channel)	Anywhere
-		End of track		0x2F	0	 														At the end of each track
-		Set tempo			0x51	3			The number of microseconds per beat				Anywhere, but usually in the first track
+		End of track		0x2F	0	 																			At the end of each track
+		Set tempo			0x51	3			The number of microseconds per beat									Anywhere, but usually in the first track
 		SMPTE offset		0x54	5			SMPTE time to denote playback offset from the beginning				Anywhere
 		Time signature		0x58	4			Time signature, metronome clicks, and size of a beat in 32nd notes	Anywhere
 		Key signature		0x59	2			A key signature														Anywhere

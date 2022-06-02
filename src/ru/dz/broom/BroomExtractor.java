@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.dz.bintools.BinFileIO;
+
 public class BroomExtractor 
 {
 	DataInputStream dis;
@@ -95,7 +97,7 @@ public class BroomExtractor
 
 	
 	
-	private int readInt() throws IOException {
+	/* private int readInt() throws IOException {
 		int b0 = dis.readByte() & 0xFF;
 		int b1 = dis.readByte() & 0xFF;
 		int b2 = dis.readByte() & 0xFF;
@@ -104,7 +106,7 @@ public class BroomExtractor
 		return b0 | (b1 <<8) | (b2 <<16) | (b3 <<24);
 	}
 
-	private String readZeroString() throws IOException 
+	/*private String readZeroString() throws IOException 
 	{
 		StringBuilder sb = new StringBuilder();
 		
@@ -125,6 +127,14 @@ public class BroomExtractor
 		}
 		
 		return sb.toString();
-	}
+	}*/
 
+	private int readInt() throws IOException {
+		return BinFileIO.readInt(dis);
+	}
+	
+	private String readZeroString() throws IOException 
+	{
+		return BinFileIO.readZeroString(dis);
+	}
 }
