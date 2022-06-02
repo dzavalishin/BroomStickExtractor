@@ -66,6 +66,16 @@ public class BinFileIO {
 		return b0 | (b1 <<8) | (b2 <<16) | (b3 <<24);
 	}
 
+	public static int readIntLE(DataInputStream dis) throws IOException 
+	{
+		int b3 = dis.readByte() & 0xFF;
+		int b2 = dis.readByte() & 0xFF;
+		int b1 = dis.readByte() & 0xFF;
+		int b0 = dis.readByte() & 0xFF;
+		
+		return b0 | (b1 <<8) | (b2 <<16) | (b3 <<24);
+	}
+
 
 
 	public static String read4c(DataInputStream dis) throws IOException {

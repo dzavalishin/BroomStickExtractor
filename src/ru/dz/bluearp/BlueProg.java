@@ -42,6 +42,7 @@ public class BlueProg
 	private void decodeChunk(String name, byte[] data) {
 		if( "pgnm".equals(name) )		{ decodePgnm(data); return; }
 		if( "prgp".equals(name) )		{ decodePrgp(data); return; }
+		//if( "fpgp".equals(name) )		{ decodePrgp(data); return; }
 		
 		if( "stp0".equals(name) )		{ decodeStep(data, 0); return; }
 		if( "stp1".equals(name) )		{ decodeStep(data, 1); return; }
@@ -54,10 +55,10 @@ public class BlueProg
 		BinFileIO.dump(name+" ", data);		
 	}
 
-	private void decodePrgp(byte[] data) {
-		
-		BlueParameters.dumpWithDescriptor("Prgp ", data, BlueParameters.fpgpDescriptors);
-
+	private void decodePrgp(byte[] data) 
+	{
+		// TODO
+		//BlueParameters.dumpWithDescriptor("Prgp ", data, BlueParameters.fpgpDescriptors);
 	}
 
 	private void decodeStep(byte[] data, int stepType) {
