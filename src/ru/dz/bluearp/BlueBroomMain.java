@@ -10,29 +10,55 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
-public class BlueBroomMain {
-
-
-
-
+public class BlueBroomMain 
+{
 	//private static final String MIDI_FILE = "G:\\Projects\\BroomStickExtractor\\midi\\Disco_Octaves.mid";
-	private static final String MIDI_FILE = "midi/Disco_Octaves.mid";
-	//private static final String MIDI_FILE = "midi/Classic_Disco.mid"; 
+	//private static final String MIDI_FILE = "midi/Disco_Octaves.mid";
+	private static final String MIDI_FILE = "midi/Classic_Disco.mid";
 	
-	public static final int NOTE_ON = 0x90;
-	public static final int NOTE_OFF = 0x80;
-	public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+	private static final boolean printDetails = true;
+	private static final boolean printOff = false;
+	
+	/**
+	 * Numerator of song signature ( 4/? )
+	 */
+	private static int signatureNumerator;
 
+	/**
+	 * Denominator of song signature ( ?/4 )
+	 */
+	private static int signatureDenominator;
+	
+	/** 
+	 * Ticks per beat.
+	 * 
+	 * (mult by measuresPerBeat to get ticks per measure)
+	 */
+	private static int ticksPerBeat;
+	
+	/** 
+	 * which part of measure beat is (usually 4th). In 32th.
+	 * 
+	 * Какую часть такта составляет доля (обычно 4-ю) - исчисляется в 32-х
+	 */
+	private static int n32PerBeat;
+
+	
 	public static void main(String[] args) throws Exception {
 		Sequence sequence = MidiSystem.getSequence(new File(MIDI_FILE));
 
+		printSequence(sequence);
+
+	}
+
+	private static void printSequence(Sequence sequence) 
+	{
 		int trackNumber = 0;
 		for (Track track :  sequence.getTracks()) 
 		{
 			trackNumber++;
 			printMidiTrack(trackNumber, track);
 		}
-
 	}
 
 	private static void printMidiTrack(int trackNumber, Track track) {
@@ -47,20 +73,25 @@ public class BlueBroomMain {
 		System.out.println();
 	}
 
-	private static void printMidiEvent(MidiEvent event) {
-		//System.out.print("@" + event.getTick() + " ");
+	
+	private static void printMidiEvent(MidiEvent event) 
+	{
+		//if(printDetails) System.out.print("@" + event.getTick() + " ");
 		MidiMessage message = event.getMessage();
-		if (message instanceof ShortMessage) {
+		
+		if (message instanceof ShortMessage) 
+		{
 			ShortMessage sm = (ShortMessage) message;
-			//System.out.print("Channel: " + sm.getChannel() + " ");
-			if (sm.getCommand() == NOTE_ON) {
-				//printMidiNote(sm,"on");
-				printMidiNoteShort(sm);
-			} else if (sm.getCommand() == NOTE_OFF) {
-				printMidiNote(sm,"off");
+			//if(printDetails) System.out.print("Channel: " + sm.getChannel() + " ");
+			if (sm.getCommand() == MidiDefs.NOTE_ON) {
+				if(printDetails) printMidiNote(sm,"on",event);
+				else printMidiNoteShort(sm);
+			} else if (sm.getCommand() == MidiDefs.NOTE_OFF) {
+				if(printDetails && printOff) printMidiNote(sm,"off",event);
 			} else {
 				System.out.println("Command:" + sm.getCommand());
 			}
+			
 		} else if (message instanceof MetaMessage) { 
 			MetaMessage mm = (MetaMessage) message;
 			printMidiMeta(mm);
@@ -91,6 +122,12 @@ public class BlueBroomMain {
 			int den = 1 << b[1];
 			int ticks = b[2];
 			int n32 = b[3];
+			
+			signatureNumerator = num;		// 4/
+			signatureDenominator = den;		// /4
+			ticksPerBeat = ticks;			
+			n32PerBeat = n32;			 
+			
 			System.out.print("(signature "+num+"/"+den+", "); 
 			System.out.print(""+ticks+" ticks/beat, "+n32+"/32 per beat)"); 
 			break;
@@ -137,14 +174,32 @@ public class BlueBroomMain {
 		return new String(mm.getData());
 	}
 
-	private static void printMidiNote(ShortMessage sm, String msg) 
-	{
+	private static void printMidiNote(ShortMessage sm, String msg, MidiEvent event) 
+	{		
 		int key = sm.getData1();
 		int octave = (key / 12)-1;
 		int note = key % 12;
-		String noteName = NOTE_NAMES[note];
+		String noteName = MidiDefs.NOTE_NAMES[note];
 		int velocity = sm.getData2();
+		
+		if( !printOff ) {
+			if (velocity == 0)
+				return;
+		}
+		
+		//System.out.print("@" + event.getTick() + " ");
+		//System.out.print("@" + tickToMeasure(event.getTick()) + " ");
+		
+		/*
+		System.out.print( tickToMeasure(event.getTick()) + " ");
+		System.out.print("Channel: " + sm.getChannel() + " ");
 		System.out.println("Note "+msg+", " + noteName + octave + " key=" + key + " velocity: " + velocity);
+		*/
+		
+		if( !printOff )
+			System.out.printf("%10s ch %2d  %-2s%d  vel %3d\n", tickToMeasure(event.getTick()), sm.getChannel(), noteName, octave, velocity );
+		else
+			System.out.printf("%10s ch %2d  note %-3s %-2s%d  vel %3d\n", tickToMeasure(event.getTick()), sm.getChannel(), msg, noteName, octave, velocity );
 	}
 
 	private static void printMidiNoteShort(ShortMessage sm) 
@@ -152,8 +207,29 @@ public class BlueBroomMain {
 		int key = sm.getData1();
 		int octave = (key / 12)-1;
 		int note = key % 12;
-		String noteName = NOTE_NAMES[note];
+		String noteName = MidiDefs.NOTE_NAMES[note];
 	
 		System.out.print(noteName + octave + " ");
 	}
+	
+	
+	private static String tickToMeasure(long tick)
+	{
+		long beats = tick/ticksPerBeat;
+		int extraTicks = (int) (tick % ticksPerBeat);
+
+		int betasPerMeasure = 32/n32PerBeat;
+		
+		int measures = (int) (beats/betasPerMeasure);
+		int extraBeats= (int) (beats%betasPerMeasure);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("" + measures + "." + extraBeats );
+		if(extraTicks != 0)
+			sb.append("(+" +extraTicks+")");
+		
+		return sb.toString();
+	}
+	
 }	
