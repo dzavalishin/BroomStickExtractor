@@ -3,6 +3,7 @@ package ru.dz.bintools;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import ru.dz.broom.BroomMain;
 
@@ -130,20 +131,50 @@ public class BinFileIO {
 	}
 
 
+	/**
+	 * 
+	 * @param dos File to write to.
+	 * @param chunkName Name (4cc) of chunk.
+	 * @param chunkData Binary data to write.
+	 * @param checkLength Max possible length of data or 0 to skip check.
+	 * @return Length of chunk written.
+	 * @throws IOException
+	 */
 
-	public static void writeChunk(DataOutputStream dos, String chunkName, byte[] chunkData, int checkLength) throws IOException 
+	public static int writeChunk(DataOutputStream dos, String chunkName, byte[] chunkData, int checkLength) throws IOException 
 	{
-		if( chunkData.length > checkLength )
-			System.err.printf("Writing %s: len %d > %d", chunkName, chunkData.length, checkLength );
+		if( (checkLength != 0) && (chunkData.length > checkLength) )
+		{
+			String err = String.format("Writing %s: len %d > %d", chunkName, chunkData.length, checkLength );
+			System.err.println(err);
+			throw new IOException(err);
+		}
 
-		if( chunkName.length() != 4 )
-			System.err.printf("Writing %s: name len %d != 4", chunkName, chunkName.length() );
+		//if( chunkName.length() != 4 )			System.err.printf("Writing %s: name len %d != 4", chunkName, chunkName.length() );
 		
-		write4c(dos, chunkName);
-		writeInt(dos, chunkData.length);
+		//write4c(dos, chunkName);
+		//writeInt(dos, chunkData.length);
+		
+		writeChunkHeader(dos, chunkName, chunkData.length);		
 		dos.write(chunkData);
+		
+		return chunkData.length + 8;
 	}
 
+
+	public static void writeChunkHeader(DataOutputStream dos, String chunkName, int length) throws IOException 
+	{
+		if( chunkName.length() != 4 )
+		{
+			String err = String.format("Writing %s: name len %d != 4", chunkName, chunkName.length() );
+			System.err.println(err);
+			throw new IOException(err);
+		}
+
+		write4c(dos, chunkName);
+		writeInt(dos, length);
+	}
+	
 	
 
 	private static void write4c(DataOutputStream dos, String chunkName) throws IOException {
@@ -168,6 +199,30 @@ public class BinFileIO {
 		dos.writeByte(b1);
 		dos.writeByte(b2);
 		dos.writeByte(b3);		
+	}
+
+
+	/**
+	 * Write chunk that contains a string of a fixed size.
+	 * 
+	 * @param dos File to write to.
+	 * @param name Chunk name (4cc).
+	 * @param data Chunk contents.
+	 * @param dataLen Fixed size.
+	 * @return Length of a chunk written.
+	 * @throws IOException
+	 */
+
+	public static int writeFixedStringChunk(DataOutputStream dos, String name, String data, int dataLen) throws IOException {
+		byte[] datab = data.getBytes();
+		
+		byte[] dataf = new byte[dataLen];
+		Arrays.fill(dataf, (byte)0);
+		
+		int copySize = Math.min(dataf.length-1, datab.length); // -1 left zero at end?
+		System.arraycopy(datab, 0, dataf, 0, copySize);
+		
+		return writeChunk(dos, name, dataf, dataLen);
 	}
 	
 }

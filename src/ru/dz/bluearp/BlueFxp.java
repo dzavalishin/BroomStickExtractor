@@ -1,8 +1,11 @@
 package ru.dz.bluearp;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +30,17 @@ import ru.dz.bintools.BinFileIO;
 
 public class BlueFxp 
 {
+	private static final int N_CHAINS_IN_FXP = 16;
+	private static final int N_PROGS_IN_FXP = 128;
+	
 	private List<BlueProg> programs = new ArrayList<BlueProg>();
 	private List<BlueChain> chains = new ArrayList<BlueChain>();
 
 	// Temps used to construct chain
 	private byte[] chainSteps;
 	private byte[] chainParams;
+	private byte[] fixpData;
+	private byte[] fpgpData;
 
 	public void load(String fileName) throws IOException 
 	{
@@ -57,6 +65,65 @@ public class BlueFxp
 		System.out.printf("Loaded %d chains, %d programs", chains.size(), programs.size() );
 	}
 
+	
+	public void save(String fileName) throws IOException 
+	{
+		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream(fileName) );
+		DataOutputStream dos = new DataOutputStream(bos);
+
+		//dos.skip(0xA0); // TODO fixed headers?
+		{
+			byte[] empty = new byte[0xA0];
+			dos.write(empty);
+		}
+		
+		/*
+		 * <li> 1 fixp
+		 * <li> 1 fpgp
+		 * <li> 16 groups of chnp, chns, chnn
+		 * <li> 128 prog
+		 */
+		
+		BinFileIO.writeChunk( dos, "fixp", fixpData, BlueParameters.fixpDescriptors.length );
+		BinFileIO.writeChunk( dos, "fpgp", fpgpData, BlueParameters.fpgpDescriptors.length );
+		
+		
+		int nChains = 0;
+		for( BlueChain c : chains )
+		{
+			c.writeTo( dos );
+			if( ++nChains >= N_CHAINS_IN_FXP )
+				break;
+		}
+		
+		while(nChains < N_CHAINS_IN_FXP )
+		{
+			BlueChain empty = new BlueChain();
+			empty.writeTo( dos );
+			nChains++;
+		}
+
+
+		int nProgs = 0;
+		for( BlueProg p : programs )
+		{
+			p.writeTo( dos );
+			if( ++nProgs >= N_PROGS_IN_FXP)
+				break;
+		}
+		
+		while(nProgs < N_PROGS_IN_FXP )
+		{
+			BlueProg empty = new BlueProg();
+			empty.writeTo( dos );
+			nProgs++;
+		}
+		
+		
+		dos.close();
+	}	
+	
+	
 	private void readTopChunk(DataInputStream dis) throws IOException {
 		String chunkName = BinFileIO.read4c(dis);
 		int chunkSize = BinFileIO.readInt(dis);		
@@ -156,6 +223,8 @@ public class BlueFxp
 	private void decodeFixp(byte[] data) {
 		// BinFileIO.dump("Fixp ", data);	
 
+		fixpData = data;
+		
 		// TODO 
 		//BlueParameters.dumpWithDescriptor("Fixp ", data,BlueParameters.fixpDescriptors);
 
@@ -166,6 +235,7 @@ public class BlueFxp
 		// BinFileIO.dump("Fpgp ", data);	
 		// TODO 
 		//BlueParameters.dumpWithDescriptor("Fpgp ", data,BlueParameters.fpgpDescriptors);
+		fpgpData = data;
 	}
 
 	private void decodeProg(byte[] data) {
