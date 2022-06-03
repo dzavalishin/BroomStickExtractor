@@ -1,9 +1,7 @@
 package ru.dz.bluearp;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ru.dz.bintools.BinFileIO;
@@ -13,7 +11,7 @@ public class BlueProg
 	private static final int N_PROG_STEPS = 64;
 	private static final int PROGRAM_NAME_LEN = 16*3;
 	private String name = "(unnamed)";
-	private ArpStep steps[] = new ArpStep[64]; // TODO const 
+	private ArpStep steps[] = new ArpStep[N_PROG_STEPS]; 
 	private byte[] prgpData;
 
 

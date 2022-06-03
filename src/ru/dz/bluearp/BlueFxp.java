@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.dz.bintools.BinFileIO;
+import ru.dz.bintools.ChunkOutputStream;
 
 /**
  * 
@@ -78,6 +79,7 @@ public class BlueFxp
 			dos.write(empty);
 		}
 		
+		/*
 		ByteArrayOutputStream storeBos = new ByteArrayOutputStream();
 		DataOutputStream bank = new DataOutputStream(storeBos);
 		
@@ -85,7 +87,10 @@ public class BlueFxp
 		byte[] bankChunkData = storeBos.toByteArray();
 
 		BinFileIO.writeChunk(dos, "bbnk", bankChunkData, 0);
-		
+		*/
+		ChunkOutputStream bank = new ChunkOutputStream();
+		writeBank(bank.getStream());
+		bank.writeChunk(dos, "bbnk");
 		
 		dos.close();
 		System.out.printf("Saved %d chains, %d programs\n", chains.size(), programs.size() );
