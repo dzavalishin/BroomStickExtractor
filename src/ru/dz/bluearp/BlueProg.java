@@ -101,8 +101,8 @@ public class BlueProg
 		//     stp4 - step-related params: VELOCITY
 		//     stp5 - step-related params: GATE TIME		 * 
 
+		BinFileIO.writeChunk( store, "prgp", prgpData, BlueParameters.fpgpDescriptors.length );
 		BinFileIO.writeFixedStringChunk( store, "pgnm", name, PROGRAM_NAME_LEN );		
-		BinFileIO.writeChunk( store, "chnp", prgpData, BlueParameters.fpgpDescriptors.length );
 
 		BinFileIO.writeChunk( store, "stp0", getStepsArray(0), N_PROG_STEPS );
 		BinFileIO.writeChunk( store, "stp1", getStepsArray(1), N_PROG_STEPS );

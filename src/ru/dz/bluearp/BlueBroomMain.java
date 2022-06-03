@@ -1,7 +1,9 @@
 package ru.dz.bluearp;
 
 import java.io.File;
+import java.io.IOException;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
@@ -45,13 +47,23 @@ public class BlueBroomMain
 	private static int n32PerBeat;
 
 	
-	public static void main(String[] args) throws Exception 
+	public static void main(String[] args)  
 	{
-		BlueFxp fxp = new BlueFxp();
-		fxp.load(FXP_FILE);
-		
-		Sequence sequence = MidiSystem.getSequence(new File(MIDI_FILE));
-		//printSequence(sequence);
+		try {
+			BlueFxp fxp = new BlueFxp();
+
+			fxp.load(FXP_FILE);
+			fxp.save(FXP_FILE+".new");
+			
+			Sequence sequence = MidiSystem.getSequence(new File(MIDI_FILE));
+			//printSequence(sequence);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidMidiDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

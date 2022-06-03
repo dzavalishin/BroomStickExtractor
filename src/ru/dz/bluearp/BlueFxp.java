@@ -2,6 +2,7 @@ package ru.dz.bluearp;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -62,7 +63,7 @@ public class BlueFxp
 
 		dis.close();
 		
-		System.out.printf("Loaded %d chains, %d programs", chains.size(), programs.size() );
+		System.out.printf("Loaded %d chains, %d programs\n", chains.size(), programs.size() );
 	}
 
 	
@@ -77,6 +78,21 @@ public class BlueFxp
 			dos.write(empty);
 		}
 		
+		ByteArrayOutputStream storeBos = new ByteArrayOutputStream();
+		DataOutputStream bank = new DataOutputStream(storeBos);
+		
+		writeBank(bank);
+		byte[] bankChunkData = storeBos.toByteArray();
+
+		BinFileIO.writeChunk(dos, "bbnk", bankChunkData, 0);
+		
+		
+		dos.close();
+		System.out.printf("Saved %d chains, %d programs\n", chains.size(), programs.size() );
+	}
+
+
+	private void writeBank(DataOutputStream dos) throws IOException {
 		/*
 		 * <li> 1 fixp
 		 * <li> 1 fpgp
@@ -118,9 +134,6 @@ public class BlueFxp
 			empty.writeTo( dos );
 			nProgs++;
 		}
-		
-		
-		dos.close();
 	}	
 	
 	
