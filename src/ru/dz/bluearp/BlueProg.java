@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import ru.dz.bintools.BinFileIO;
+import ru.dz.bintools.ChunkOutputStream;
 
 public class BlueProg 
 {
@@ -84,10 +85,16 @@ public class BlueProg
 
 	public void writeTo(DataOutputStream _dos) throws IOException 
 	{
+		/*
 		ByteArrayOutputStream storeBos = new ByteArrayOutputStream();
 		//BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream(fileName) );
 		DataOutputStream store = new DataOutputStream(storeBos);
-
+		 */
+		
+		ChunkOutputStream storeChunk = new ChunkOutputStream();
+		DataOutputStream store = storeChunk.getStream();
+		
+		
 		// Program contains:
 
 		//     pgnm - program name
@@ -109,9 +116,11 @@ public class BlueProg
 		BinFileIO.writeChunk( store, "stp4", getStepsArray(4), N_PROG_STEPS );
 		BinFileIO.writeChunk( store, "stp5", getStepsArray(5), N_PROG_STEPS );
 
+		/*
 		byte[] progChunkData = storeBos.toByteArray();
-
 		BinFileIO.writeChunk(_dos, "prog", progChunkData, 0);
+		*/
+		storeChunk.writeChunk(_dos, "prog");
 	}
 
 	private byte[] getStepsArray(int stepType) {
