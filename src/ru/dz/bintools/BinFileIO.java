@@ -1,6 +1,7 @@
 package ru.dz.bintools;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import ru.dz.broom.BroomMain;
@@ -126,6 +127,47 @@ public class BinFileIO {
 			System.out.printf("%d ", data[i]);
 
 		System.out.println();
+	}
+
+
+
+	public static void writeChunk(DataOutputStream dos, String chunkName, byte[] chunkData, int checkLength) throws IOException 
+	{
+		if( chunkData.length > checkLength )
+			System.err.printf("Writing %s: len %d > %d", chunkName, chunkData.length, checkLength );
+
+		if( chunkName.length() != 4 )
+			System.err.printf("Writing %s: name len %d != 4", chunkName, chunkName.length() );
+		
+		write4c(dos, chunkName);
+		writeInt(dos, chunkData.length);
+		dos.write(chunkData);
+	}
+
+	
+
+	private static void write4c(DataOutputStream dos, String chunkName) throws IOException {
+		byte[] b = chunkName.getBytes();
+		
+		dos.writeByte(b[0]);
+		dos.writeByte(b[1]);
+		dos.writeByte(b[2]);
+		dos.writeByte(b[3]);		
+	}
+
+
+
+	public static void writeInt(DataOutputStream dos, int val) throws IOException 
+	{
+		byte b0 = (byte) (val & 0xFF);
+		byte b1 = (byte) ((val >>  8) & 0xFF);
+		byte b2 = (byte) ((val >> 16) & 0xFF);
+		byte b3 = (byte) ((val >> 24) & 0xFF);
+		
+		dos.writeByte(b0);
+		dos.writeByte(b1);
+		dos.writeByte(b2);
+		dos.writeByte(b3);		
 	}
 	
 }
