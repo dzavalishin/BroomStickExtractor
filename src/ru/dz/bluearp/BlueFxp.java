@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import ru.dz.bintools.ChunkOutputStream;
  * 
  * BlueArp fxp file import/export.
  * 
- * It seems that fxp contains:
+ * It seems that 'bbnk' contains:
  * 
  * <li> 1 fixp
  * <li> 1 fpgp

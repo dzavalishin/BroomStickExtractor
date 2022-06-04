@@ -1,5 +1,6 @@
 package ru.dz.bintools;
 
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class BinFileIO {
 	}
 	
 	
-	public static int readInt(DataInputStream dis) throws IOException 
+	public static int readInt(DataInput dis) throws IOException 
 	{
 		int b0 = dis.readByte() & 0xFF;
 		int b1 = dis.readByte() & 0xFF;
@@ -68,7 +69,23 @@ public class BinFileIO {
 		return b0 | (b1 <<8) | (b2 <<16) | (b3 <<24);
 	}
 
-	public static int readIntLE(DataInputStream dis) throws IOException 
+	public static long readLong(DataInput dis) throws IOException 
+	{
+		//return dis.readLong();
+		/*int b1 = dis.readByte() & 0xFF;
+		int b2 = dis.readByte() & 0xFF;
+		int b3 = dis.readByte() & 0xFF;
+		
+		return b0 | (b1 <<8) | (b2 <<16) | (b3 <<24); */
+		
+		int lo = readInt(dis);
+		int hi = readInt(dis);
+		
+		return lo | (hi << 32);
+	}
+	
+	
+	public static int readIntLE(DataInput dis) throws IOException 
 	{
 		int b3 = dis.readByte() & 0xFF;
 		int b2 = dis.readByte() & 0xFF;
@@ -80,10 +97,12 @@ public class BinFileIO {
 
 
 
-	public static String read4c(DataInputStream dis) throws IOException {
+	//public static String read4c(DataInputStream dis) throws IOException {
+	public static String read4c(DataInput dis) throws IOException {
 		byte buf[] = new byte[4];
-		if( buf.length != dis.read(buf) )
-			throw new IOException("can't read 4c");
+		//if( buf.length != dis.read(buf) )			throw new IOException("can't read 4c");
+		
+		dis.readFully(buf);
 		
 		return new String(buf);
 	}
@@ -97,10 +116,11 @@ public class BinFileIO {
 	}
 	
 	
-	public static byte[] readBytes(DataInputStream dis, int len) throws IOException {
+	public static byte[] readBytes(DataInput dis, int len) throws IOException {
 		byte buf[] = new byte[len];
-		if( buf.length != dis.read(buf) )
-			throw new IOException("can't read "+len+" bytes");
+		//if( buf.length != dis.read(buf) )			throw new IOException("can't read "+len+" bytes");
+		
+		dis.readFully(buf);
 		
 		return buf;
 	}
