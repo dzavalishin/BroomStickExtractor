@@ -35,6 +35,8 @@ public class BlueFxp
 {
 	private BlueBank bank = new BlueBank();
 	
+	public BlueBank getBank() {		return bank;	}
+	
 	/**
 	 * 
 	 * Load .fxp file for BlueArp
@@ -42,42 +44,17 @@ public class BlueFxp
 	 */
 	
 	public void load(String fileName) throws IOException 
-	{
-		testParseTop(fileName);
-		//if(true) return;
-		
+	{		
 		BufferedInputStream bis = new BufferedInputStream( new FileInputStream(fileName) );
 		DataInputStream dis = new DataInputStream(bis);
 
 		dis.skip(0xA0); // fixed headers?
 		bank.readFrom(dis);
 
-		dis.close();
-		
+		dis.close();		
 	}
 
 	
-	private void testParseTop(String fileName) throws IOException 
-	{
-		BufferedInputStream bis = new BufferedInputStream( new FileInputStream(fileName) );
-		DataInputStream dis = new DataInputStream(bis);
-
-		/*
-		String allFileChunkName = BinFileIO.read4c(dis);
-		int allFileChunkSize = BinFileIO.readIntLE(dis);		
-
-		File f = new File(fileName);
-		
-		long diff = allFileChunkSize - f.length() - 8;
-		
-		System.out.printf("all file chunk %s size %d diff = %d\n", allFileChunkName, allFileChunkSize, diff );
-		*/
-		dis.skip(0x14);		
-		int data = BinFileIO.readIntLE(dis);		
-		System.out.printf("data %d\n", data );
-		
-		//System.exit(33);
-	}
 
 	
 
@@ -147,7 +124,6 @@ public class BlueFxp
 	}*/
 	
 	/*
-ага, вот еще что, есть потом код который обновляет позиции 'chunk size' в этом хедере после того как он становится известен:
 
 // update FXB header according to actual chunk size
 void ARP_Bank_Chunk_FXB_Header_UpdateSize(ARP_t* pARP, BChunk* pChunk)
@@ -160,7 +136,6 @@ void ARP_Bank_Chunk_FXB_Header_UpdateSize(ARP_t* pARP, BChunk* pChunk)
   pChunk->size = chunk_size;
 }
 
-получается что после записи хедера вот эти позиции потом еще обновляются, когда становится известен размер чанка
 // write FXB header to chunk
 void ARP_Bank_Chunk_FXB_Header_Write(ARP_t* pARP, BChunk* pChunk)
 {
@@ -179,7 +154,6 @@ void ARP_Bank_Chunk_FXB_Header_Write(ARP_t* pARP, BChunk* pChunk)
   BChunk_PutInt_bswap(pChunk, 0);      // chunk size (dummy)
 }
 
-Давно уже этот код писал, поэтому тонкости сразу не вспоминаются.
 	 
 	 */
 	

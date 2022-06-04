@@ -6,6 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * 
+ * BroomStick Bass resource file directory record.
+ * @author dz
+ *
+ */
+
 public class DirRecord {
 
 	private String name;

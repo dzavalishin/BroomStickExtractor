@@ -1,20 +1,17 @@
 package ru.dz.bintools;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 
 import ru.dz.bluearp.BlueBank;
 import ru.dz.bluearp.BlueDefs;
 
 public class VST3Writer implements VST3Defs 
 {	
-	private final BlueBank bank;
+	//private final BlueBank bank;
 
 	public VST3Writer(BlueBank bank, String fileName) throws IOException {
-		this.bank = bank;
+		//this.bank = bank;
 		RandomAccessFile dos = new RandomAccessFile(fileName, "rw");
 		
 		// Write header

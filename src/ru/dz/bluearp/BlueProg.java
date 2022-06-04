@@ -135,9 +135,10 @@ public class BlueProg
 
 		for( int i = 0; i < data.length; i++)
 		{
-			if(steps[i] == null) data[i] = 0;
-
-			data[i] = (byte) steps[i].getBinary(stepType);
+			if(steps[i] == null) 
+				data[i] = 0;
+			else 
+				data[i] = (byte) steps[i].getBinary(stepType);
 		}
 		
 		return data;
