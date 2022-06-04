@@ -56,12 +56,17 @@ public class VST3Writer implements VST3Defs
 	}
 
 
-	private Vst3ChunkWriter makeBankChunk(BlueBank bank) throws IOException {
+	private Vst3ChunkWriter makeBankChunk(BlueBank bank) throws IOException 
+	{
+		/*
 		ByteArrayOutputStream storeBos = new ByteArrayOutputStream();
 		DataOutputStream bos = new DataOutputStream(storeBos);		
 		
 		bank.writeTo(bos);
 		return new Vst3ChunkWriter(storeBos.toByteArray());
+		*/
+		
+		return new Vst3ChunkWriter(bank.toByteArray());
 	}
 
 	private Vst3ChunkWriter makeXmlChunk() {

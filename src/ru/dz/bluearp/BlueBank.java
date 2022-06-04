@@ -1,5 +1,6 @@
 package ru.dz.bluearp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -198,6 +199,18 @@ public class BlueBank
 		ChunkOutputStream banks = new ChunkOutputStream();
 		writeBank(banks.getStream());
 		banks.writeChunk(dos, "bbnk");
+	}
+
+
+
+
+	public byte[] toByteArray() throws IOException {
+		ByteArrayOutputStream storeBos = new ByteArrayOutputStream();
+		DataOutputStream bos = new DataOutputStream(storeBos);		
+		
+		writeTo(bos);
+		
+		return storeBos.toByteArray();
 	}	
 	
 }

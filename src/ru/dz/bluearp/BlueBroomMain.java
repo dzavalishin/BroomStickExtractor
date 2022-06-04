@@ -54,10 +54,12 @@ public class BlueBroomMain
 	public static void main(String[] args)  
 	{
 		try {
+			/*
 			VST3Reader vir = new VST3Reader(VST3_FILE);
 			VST3Writer viw = new VST3Writer(vir.getBank(), VST3_FILE+".new");
 					
 			System.exit(32);
+			*/
 			
 			BlueFxp fxp = new BlueFxp();
 

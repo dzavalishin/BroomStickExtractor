@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.Arrays;
 
 import ru.dz.broom.BroomMain;
@@ -222,6 +223,20 @@ public class BinFileIO {
 		dos.writeByte(b3);		
 	}
 
+	public static void writeIntLE(DataOutput dos, int val) throws IOException 
+	{
+		byte b3 = (byte) (val & 0xFF);
+		byte b2 = (byte) ((val >>  8) & 0xFF);
+		byte b1 = (byte) ((val >> 16) & 0xFF);
+		byte b0 = (byte) ((val >> 24) & 0xFF);
+		
+		dos.writeByte(b0);
+		dos.writeByte(b1);
+		dos.writeByte(b2);
+		dos.writeByte(b3);		
+	}
+	
+	
 	public static void writeLong(DataOutput dos, long val) throws IOException 
 	{
 		writeInt(dos, (int) val );
@@ -249,6 +264,13 @@ public class BinFileIO {
 		System.arraycopy(datab, 0, dataf, 0, copySize);
 		
 		return writeChunk(dos, name, dataf, dataLen);
+	}
+
+
+
+	public static void writeFillBytes(RandomAccessFile dos, int count) throws IOException {
+		while(count-- > 0)
+			dos.writeByte(0);
 	}
 	
 }
