@@ -198,7 +198,7 @@ public class BinFileIO {
 	
 	
 
-	private static void write4c(DataOutput dos, String chunkName) throws IOException {
+	public static void write4c(DataOutput dos, String chunkName) throws IOException {
 		byte[] b = chunkName.getBytes();
 		
 		dos.writeByte(b[0]);
@@ -222,6 +222,11 @@ public class BinFileIO {
 		dos.writeByte(b3);		
 	}
 
+	public static void writeLong(DataOutput dos, long val) throws IOException 
+	{
+		writeInt(dos, (int) val );
+		writeInt(dos, (int) (val >> 32) );
+	}	
 
 	/**
 	 * Write chunk that contains a string of a fixed size.

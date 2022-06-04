@@ -28,7 +28,7 @@ public class BlueChain
 		this.chainSteps = chainSteps;
 		//this.chainParams = chainParams;
 
-		dump();
+		//dump();
 	}
 
 	public BlueChain(String name, byte[] chainSteps, byte[] chainParams) {
@@ -36,7 +36,7 @@ public class BlueChain
 		this.chainSteps = chainSteps;
 		params.setContents(chainParams);
 
-		dump();
+		//dump();
 	}
 	
 	static private byte[] emptySteps = new byte[8];
@@ -70,7 +70,6 @@ public class BlueChain
 		}
 		System.out.println();
 
-		//BlueParameters.dumpWithDescriptor("Chain params", chainParams, BlueParameters.chnpDescriptors);
 		params.dump("Chain params");
 
 		

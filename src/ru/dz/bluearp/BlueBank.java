@@ -2,12 +2,14 @@ package ru.dz.bluearp;
 
 import java.io.DataInput;
 import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.dz.bintools.BinFileIO;
 import ru.dz.bintools.ChunkInputStream;
+import ru.dz.bintools.ChunkOutputStream;
 
 public class BlueBank 
 {
@@ -27,7 +29,7 @@ public class BlueBank
 
 	
 	
-	public void readTopChunk(DataInput dis) throws IOException 
+	public void readFrom(DataInput dis) throws IOException 
 	{
 		ChunkInputStream cis = new ChunkInputStream(dis); 
 		System.out.printf("top %s\n", cis);
@@ -63,7 +65,7 @@ public class BlueBank
 
 	private void decodeChunk(String name, byte[] data) throws IOException 
 	{
-		System.out.printf("decode %s size %d\n", name, data.length);
+		//System.out.printf("decode %s size %d\n", name, data.length);
 
 		if( "prog".equals(name) )		{ decodeProg(data); return; }
 		if( "chns".equals(name) )		{ decodeChns(data); return; }
@@ -110,7 +112,7 @@ public class BlueBank
 		// TODO 
 		//BlueParameters.dumpWithDescriptor("Fixp ", data,BlueParameters.fixpDescriptors);
 		fixedParameters.setContents(data);
-		fixedParameters.dump("Fixp ");
+		//fixedParameters.dump("Fixp ");
 		
 		fixedParameters.checkSanity();
 	}
@@ -139,7 +141,7 @@ public class BlueBank
 	
 	
 	
-	public void writeBank(DataOutput dos) throws IOException {
+	private void writeBank(DataOutput dos) throws IOException {
 		/*
 		 * <li> 1 fixp
 		 * <li> 1 fpgp
@@ -187,6 +189,15 @@ public class BlueBank
 		}
 		
 		System.out.printf("Saved %d chains, %d programs\n", chains.size(), programs.size() );		
+	}
+
+
+
+
+	public void writeTo(DataOutputStream dos) throws IOException {
+		ChunkOutputStream banks = new ChunkOutputStream();
+		writeBank(banks.getStream());
+		banks.writeChunk(dos, "bbnk");
 	}	
 	
 }

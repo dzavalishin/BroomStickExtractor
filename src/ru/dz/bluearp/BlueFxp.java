@@ -49,7 +49,7 @@ public class BlueFxp
 		DataInputStream dis = new DataInputStream(bis);
 
 		dis.skip(0xA0); // fixed headers?
-		bank.readTopChunk(dis);
+		bank.readFrom(dis);
 
 		dis.close();
 		
@@ -98,9 +98,7 @@ public class BlueFxp
 			dos.write(empty);
 		}
 		
-		ChunkOutputStream banks = new ChunkOutputStream();
-		bank.writeBank(banks.getStream());
-		banks.writeChunk(dos, "bbnk");
+		bank.writeTo(dos);
 		
 		dos.close();
 	}

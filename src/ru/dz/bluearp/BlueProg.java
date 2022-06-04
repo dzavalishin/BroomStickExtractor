@@ -71,7 +71,7 @@ public class BlueProg
 		//BlueParameters.dumpWithDescriptor("Prgp ", data, BlueParameters.fpgpDescriptors);
 		//prgpData = data;
 		param.setContents(data);
-		param.dump("Program parameters");
+		//param.dump("Program parameters");
 	}
 
 	private void decodeStep(byte[] data, int stepType) {

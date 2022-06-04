@@ -8,9 +8,8 @@ import java.util.List;
 
 import ru.dz.bluearp.BlueBank;
 
-public class VST3Reader 
+public class VST3Reader implements VST3Defs
 {
-	static final String VST3_ID = "F2AEE70D00DE4F4E4F4D477742417270";
 	private BlueBank bank; 
 	
 	public VST3Reader(String fileName) throws IOException 
@@ -47,7 +46,7 @@ public class VST3Reader
 			long chunkOffset = BinFileIO.readLong(dis);
 			long chunkSize = BinFileIO.readLong(dis);
 			
-			//System.out.printf("VST3 list element '%s' offset %d size %d\n", id, chunkOffset, chunkSize );
+			System.out.printf("VST3 list element '%s' offset %d size %d\n", id, chunkOffset, chunkSize );
 			
 			Vst3ChunkReader v3chunk = new Vst3ChunkReader(id, chunkOffset, chunkSize);
 			chunks.add(v3chunk);
@@ -59,7 +58,7 @@ public class VST3Reader
 			if("Comp".equals(c.getId()))
 			{
 				bank = new BlueBank();
-				bank.readTopChunk(c.getStream());
+				bank.readFrom(c.getStream());
 			}
 		}
 		
