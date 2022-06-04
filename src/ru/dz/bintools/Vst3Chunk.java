@@ -1,6 +1,10 @@
 package ru.dz.bintools;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,6 +37,16 @@ public class Vst3Chunk {
 		data = BinFileIO.readBytes(dis, (int)size);
 
 		//Files.write(Paths.get("bluearp/vst3."+id+".data"), data, StandardOpenOption.CREATE);
+	}
+
+	public Object getId() {
+		return id;
+	}
+
+	public DataInput getStream() {
+		ByteArrayInputStream s = new ByteArrayInputStream(data);
+		DataInputStream dis = new DataInputStream(s);
+		return dis;
 	}
 
 }

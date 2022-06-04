@@ -1,5 +1,6 @@
 package ru.dz.bluearp;
 
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -87,7 +88,7 @@ public class BlueProg
 		//System.out.printf("pgnm '%s'\n", name);
 	}
 
-	public void writeTo(DataOutputStream _dos) throws IOException 
+	public void writeTo(DataOutput _dos) throws IOException 
 	{
 		/*
 		ByteArrayOutputStream storeBos = new ByteArrayOutputStream();

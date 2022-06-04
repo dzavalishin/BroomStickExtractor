@@ -1,5 +1,6 @@
 package ru.dz.bluearp;
 
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -84,7 +85,7 @@ public class BlueChain
 	 * @return 
 	 * @throws IOException 
 	 */
-	public int writeTo(DataOutputStream dos) throws IOException 
+	public int writeTo(DataOutput dos) throws IOException 
 	{
 		if(chainSteps.length != 8)
 			throw new IOException("Chain size != 8");

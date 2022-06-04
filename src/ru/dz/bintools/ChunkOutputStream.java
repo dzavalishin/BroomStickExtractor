@@ -1,6 +1,7 @@
 package ru.dz.bintools;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class ChunkOutputStream
 		return bos;
 	}
 
-	public void writeChunk(DataOutputStream dos, String chunkName) throws IOException {
+	public void writeChunk(DataOutput dos, String chunkName) throws IOException {
 		byte[] bankChunkData = storeBos.toByteArray();
 		BinFileIO.writeChunk(dos, chunkName, bankChunkData, 0);		
 	}

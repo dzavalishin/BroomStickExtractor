@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ru.dz.bluearp.BlueBank;
+
 public class VST3InputStream 
 {
 	static final String VST3_ID = "F2AEE70D00DE4F4E4F4D477742417270";
+	private BlueBank bank; 
 	
 	//private DataInputStream dis;
 	
@@ -82,10 +85,16 @@ public class VST3InputStream
 		for(Vst3Chunk c : chunks)
 		{
 			c.loadFrom(dis);
+			if("Comp".equals(c.getId()))
+			{
+				bank = new BlueBank();
+				bank.readTopChunk(c.getStream());
+			}
 		}
 		
 		dis.close();
 	}
-	
+
+	public BlueBank getBank() { return bank; }
 	
 }

@@ -2,6 +2,7 @@ package ru.dz.bintools;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
+import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -161,7 +162,7 @@ public class BinFileIO {
 	 * @throws IOException
 	 */
 
-	public static int writeChunk(DataOutputStream dos, String chunkName, byte[] chunkData, int checkLength) throws IOException 
+	public static int writeChunk(DataOutput dos, String chunkName, byte[] chunkData, int checkLength) throws IOException 
 	{
 		if( (checkLength != 0) && (chunkData.length > checkLength) )
 		{
@@ -182,7 +183,7 @@ public class BinFileIO {
 	}
 
 
-	public static void writeChunkHeader(DataOutputStream dos, String chunkName, int length) throws IOException 
+	public static void writeChunkHeader(DataOutput dos, String chunkName, int length) throws IOException 
 	{
 		if( chunkName.length() != 4 )
 		{
@@ -197,7 +198,7 @@ public class BinFileIO {
 	
 	
 
-	private static void write4c(DataOutputStream dos, String chunkName) throws IOException {
+	private static void write4c(DataOutput dos, String chunkName) throws IOException {
 		byte[] b = chunkName.getBytes();
 		
 		dos.writeByte(b[0]);
@@ -208,7 +209,7 @@ public class BinFileIO {
 
 
 
-	public static void writeInt(DataOutputStream dos, int val) throws IOException 
+	public static void writeInt(DataOutput dos, int val) throws IOException 
 	{
 		byte b0 = (byte) (val & 0xFF);
 		byte b1 = (byte) ((val >>  8) & 0xFF);
@@ -233,7 +234,7 @@ public class BinFileIO {
 	 * @throws IOException
 	 */
 
-	public static int writeFixedStringChunk(DataOutputStream dos, String name, String data, int dataLen) throws IOException {
+	public static int writeFixedStringChunk(DataOutput dos, String name, String data, int dataLen) throws IOException {
 		byte[] datab = data.getBytes();
 		
 		byte[] dataf = new byte[dataLen];
