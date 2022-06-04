@@ -2,46 +2,12 @@ package ru.dz.bluearp;
 
 import ru.dz.bluearp.c.ParamInfo_t;
 
-public class BlueParameters implements BlueDefs
-{
+public class ProgramParametersTable extends BlueParametersTable implements BlueDefs {
 
-	// ***********************************************
-	// MAIN PARAMETER ARRAY (MIN, MAX, Default, Grey, ProgPar -PBGC 01234, Name, ListIdx, Polyphonic
-	// ProgPar 0-hidden/unused, 1-Prog, 2-Bank, 3-Project (HW only), 4-Chain, 5-Bank/no label, 6-Global/INI
-	// When ProgPar=5, it's bank-related, low value, the next value is high
-	// ***********************************************
-	// unused params should have Max = 0
-
-
-	/*
-	static final ParamInfo_t fixpDescriptors[] = 
-		{
-			// FIXED PARAMS (PATCH INDEPENDENT) ------------------------------------------------ fixp
-			// 					Min,   Max, Step,    Dflt, Grey, PrgP,    "Name",                ListIdx,  cInt8,  Suff
-			  new ParamInfo_t(  0,     127,     1, patVer,    0,    0,    "PatchVer",                  0,  cInt8,  "" ),   // 0: cPatchVer
-			  new ParamInfo_t( -1,      15,     1,     -1,   -1,    2,    "MIDI In Channel",           1,  cInt8,  "" ),   // 1: cMIDIIn_Ch
-			  new ParamInfo_t(  0,      15,     1,      0,    0,    2,    "MIDI Out Channel",         16,  cInt8,  "" ),   // 2: cMIDIOut_Ch
-			  new ParamInfo_t(  0,       5,     1,      0,    0,    2,    "MIDI In Port",             32,  cInt8,  "" ),   // 3: cMIDIIn_Port  (patchVer16: cArpOn)
-			  new ParamInfo_t(  0,      13,     1,      0,    0,    2,    "MIDI Out Port",            33,  cInt8,  "" ),   // 4: cMIDIOut_Port (patchVer16: cMidiThruOn)
-			  new ParamInfo_t(  0,       6,     1,      1,    0,    2,    "Arp Mode",                 28,  cInt8,  "" ),   // 5: cArpMode
-			  new ParamInfo_t(  0,       0,     1,      0,    0,    2,    "",                          0,  cInt8,  "" ),   // 6: - unused -
-			  new ParamInfo_t(  0,     120,     1,    120,    0,    2,    "NumPrograms",              -3,  cInt8,  "" ),   // 7: cNumPrograms (ListIdx=-3 for special logic)
-			  new ParamInfo_t(  0,  maxPrg,     1,      0,   -1,    2,    "CurProgram",                0,  cInt8,  "" ),   // 8: cCurProgram
-			  new ParamInfo_t(  0,  maxBar,     1,      3,    0,    2,    "SelectedBar",              39,  cInt8,  "" ),   // 9: cSelectedBar
-			// chain-related fixed params ------------------------------------------------------
-			  new ParamInfo_t(  1,  numChn,     1,      8,    8,    2,    "Num. chains",               0,  cInt8,  "" ),   // 10: cNumChains
-			  new ParamInfo_t( -1,  maxChn,     1,     -1,   -1,    2,    "Cur_Chain",                21,  cInt8,  "" ),   // 11: cCurChain (-1: no chain or "---")
-			  new ParamInfo_t(  0,       8,     1,      5,    5,    2,    "Chain quantize",            4,  cInt8,  "" ),   // 12: cChainQuantize
-			// GUI Options ---------------------------------------------------------------------
-			  new ParamInfo_t(  0,       1,     1,      0,    0,    2,    "Fine velocity adj.",        5,  cInt8,  "" ),   // 13: cFineVelocity
-			  new ParamInfo_t(  0,       3,     1,      0,    0,    2,    "Semitone range",            6,  cInt8,  "" ),   // 14: cScaleStepRange
-			  new ParamInfo_t(  0,       2,     1,      0,    0,    2,    "Prog.chng msg",             7,  cInt8,  "" ),   // 15: cFltProgCC
-			  new ParamInfo_t(  0,       1,     1,      0,    0,    2,    "Input range mode",         22,  cInt8,  "" ),   // 16: cInRangeTruncMode
-			  new ParamInfo_t(  0,       2,     1,      0,    0,    2,    "Output velo mode",         23,  cInt8,  "" ),   // 17: cOutVeloMode
-			  new ParamInfo_t(  0,       2,     1,      0,    0,    2,    "Send bank msg",            24,  cInt8,  "" ),   // 18: cSendBankMsg
-			  new ParamInfo_t(  0,       1,     1,      0,    0,    5,    "Chain restart on sw.",      2,  cInt8,  "" ),   // 19: cChainRestart
-		};
-	* /
+	public ProgramParametersTable() {
+		super("prgp", fpgpDescriptors);
+		setDefaultContents();
+	}
 	
 	static final ParamInfo_t fpgpDescriptors[] = 
 		{
@@ -137,48 +103,5 @@ public class BlueParameters implements BlueDefs
 			  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 126: - unused -
 			  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 127: - unused -
 		};	
-	
-	
-	
-	/*
-	static final ParamInfo_t chnpDescriptors[] = 
-		{
-	// Chain-specific ------------------------------------------------------------------ chnp
-	// 					Min,   Max, Step,    Dflt, Grey, PrgP,    "Name",                ListIdx,  cInt8,  Suff
-	  new ParamInfo_t(  0,       1,     1,      1,    0,    0,    "ChainInitFlag",             0,  cInt8,  "" ),   // 20: cChainInitFlag
-	  new ParamInfo_t( -1,     127,     1,     -1,   -1,    4,    "SendPatchNum",              3,  cInt8,  "" ),   // 21: cSendPatchNum
-	  new ParamInfo_t( -1,     127,     1,     -1,   -1,    4,    "SendBankNum",               3,  cInt8,  "" ),   // 22: cSendBankNum
-	  new ParamInfo_t( -1,     127,     1,     -1,   -1,    4,    "SendVolume",                3,  cInt8,  "" ),   // 23: cSendVolume
-	  new ParamInfo_t( -1,      18,     1,     -1,   -1,    4,    "Next_Chain",               31,  cInt8,  "" ),   // 24: cNextChain (-1: "---")
-	  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 25: - unused -
-	  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 26: - unused -
-	  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 27: - unused -
-	  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 28: - unused -
-	  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 29: - unused -
-	  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 30: - unused -
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_01",             17,  cInt8,  "" ),   // 31: cChainSeq[0]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_02",             17,  cInt8,  "" ),   // 32: cChainSeq[1]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_03",             17,  cInt8,  "" ),   // 33: cChainSeq[2]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_04",             17,  cInt8,  "" ),   // 34: cChainSeq[3]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_05",             17,  cInt8,  "" ),   // 35: cChainSeq[4]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_06",             17,  cInt8,  "" ),   // 36: cChainSeq[5]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_07",             17,  cInt8,  "" ),   // 37: cChainSeq[6]
-	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_08",             17,  cInt8,  "" ),   // 38: cChainSeq[7]
-	  
-	}; */
-
-	/*
-	//static final ParamInfo_t CParam2[gNumValueBars] = {
-	static final ParamInfo_t CParam2[] = {
-	// STEP-RELATED PARAMS -------------------------------------------------------------
-	  new ParamInfo_t(-12,      12,     1,      0,    0,    1,    "ScaleStep_",                0,  cInt8,  "" ),   // 128: cScaleStep
-	  new ParamInfo_t( -3,       3,     1,      0,    0,    1,    "Octave_",                   0,  cBit8,  "" ),   // 192: cOctave    / contains mono value!
-	  new ParamInfo_t(  0,       5,     1,      1,    0,    1,    "StepType_",                18,  cInt8,  "" ),   // 256: cStepType
-	  new ParamInfo_t( -1,       5,     1,      1,    1,    1,    "KeySelect_",               19,  cBit8,  "" ),   // 320: cKeySelect / contains mono value!
-	  new ParamInfo_t(  0,     127,     1,     96,   96,    1,    "Velocity_",                 0,  cInt8,  "" ),   // 384: cVelocity, Fine
-	  new ParamInfo_t( -3,       5,     1,      0,    0,    1,    "GateStep_",                20,  cInt8,  "" ),   // 448: cGateStep, default mode
-	}; */
-
-	
 	
 }

@@ -10,9 +10,12 @@ public class BlueProg
 {
 	private static final int N_PROG_STEPS = 64;
 	private static final int PROGRAM_NAME_LEN = 16*3;
+	
 	private String name = "(unnamed)";
 	private ArpStep steps[] = new ArpStep[N_PROG_STEPS]; 
-	private byte[] prgpData;
+	private ProgramParametersTable param = new ProgramParametersTable();
+	
+	//private byte[] prgpData;
 
 
 	public void decode(byte[] data) 
@@ -65,7 +68,9 @@ public class BlueProg
 	{
 		// TODO
 		//BlueParameters.dumpWithDescriptor("Prgp ", data, BlueParameters.fpgpDescriptors);
-		prgpData = data;
+		//prgpData = data;
+		param.setContents(data);
+		param.dump("Program parameters");
 	}
 
 	private void decodeStep(byte[] data, int stepType) {
@@ -105,7 +110,9 @@ public class BlueProg
 		//     stp4 - step-related params: VELOCITY
 		//     stp5 - step-related params: GATE TIME		 * 
 
-		BinFileIO.writeChunk( store, "prgp", prgpData, BlueParameters.fpgpDescriptors.length );
+		//BinFileIO.writeChunk( store, "prgp", prgpData, BlueParameters.fpgpDescriptors.length );
+		BinFileIO.writeChunk( store, "prgp", param.getContents(), 0 );
+		
 		BinFileIO.writeFixedStringChunk( store, "pgnm", name, PROGRAM_NAME_LEN );		
 
 		BinFileIO.writeChunk( store, "stp0", getStepsArray(0), N_PROG_STEPS );

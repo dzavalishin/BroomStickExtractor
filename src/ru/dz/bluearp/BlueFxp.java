@@ -40,12 +40,13 @@ public class BlueFxp
 	private List<BlueChain> chains = new ArrayList<BlueChain>();
 	
 	FixedParametersTable fixedParameters = new FixedParametersTable();
+	ProgramParametersTable programParameters = new ProgramParametersTable();
 
 	// Temps used to construct chain
 	private byte[] chainSteps;
 	private byte[] chainParams;
 	//private byte[] fixpData;
-	private byte[] fpgpData;
+	//private byte[] fpgpData;
 
 	
 	/*
@@ -187,7 +188,8 @@ public class BlueFxp
 		// BinFileIO.dump("Fpgp ", data);	
 		// TODO 
 		//BlueParameters.dumpWithDescriptor("Fpgp ", data,BlueParameters.fpgpDescriptors);
-		fpgpData = data;
+		//fpgpData = data;
+		programParameters.setContents(data);
 	}
 
 	private void decodeProg(byte[] data) 
@@ -234,7 +236,9 @@ public class BlueFxp
 		//BinFileIO.writeChunk( dos, "fixp", fixpData, BlueParameters.fixpDescriptors.length );
 		BinFileIO.writeChunk( dos, "fixp", fixedParameters.getContents(), 0 );
 		
-		BinFileIO.writeChunk( dos, "fpgp", fpgpData, BlueParameters.fpgpDescriptors.length );
+		//BinFileIO.writeChunk( dos, "fpgp", fpgpData, BlueParameters.fpgpDescriptors.length );
+		BinFileIO.writeChunk( dos, "fpgp", programParameters.getContents(), 0 );
+		
 		
 		
 		int nChains = 0;
