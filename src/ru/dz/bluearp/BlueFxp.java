@@ -88,7 +88,7 @@ public class BlueFxp
 		int data = BinFileIO.readIntLE(dis);		
 		System.out.printf("data %d\n", data );
 		
-		System.exit(33);
+		//System.exit(33);
 	}
 
 	

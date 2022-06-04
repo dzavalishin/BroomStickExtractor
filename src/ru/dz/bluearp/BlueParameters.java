@@ -2,7 +2,7 @@ package ru.dz.bluearp;
 
 import ru.dz.bluearp.c.ParamInfo_t;
 
-public class BlueParameters 
+public class BlueParameters implements BlueDefs
 {
 
 	// ***********************************************
@@ -12,17 +12,6 @@ public class BlueParameters
 	// ***********************************************
 	// unused params should have Max = 0
 
-	static final int cInt8 = -1; // TODO find val
-	static final int cBit8 = -1; // TODO find val
-	
-	static final int patVer = -1; // TODO find val
-	
-	static final int maxPrg = -1; // TODO find val
-	static final int maxBar = -1; // TODO find val
-	static final int numChn = -1; // TODO find val
-	static final int maxChn = -1; // TODO find val
-	
-	static final int maxPag = -1; // TODO find val
 
 	
 	static final ParamInfo_t fixpDescriptors[] = 
@@ -151,7 +140,7 @@ public class BlueParameters
 	
 	
 	
-	
+	/*
 	static final ParamInfo_t chnpDescriptors[] = 
 		{
 	// Chain-specific ------------------------------------------------------------------ chnp
@@ -176,7 +165,7 @@ public class BlueParameters
 	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_07",             17,  cInt8,  "" ),   // 37: cChainSeq[6]
 	  new ParamInfo_t( -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_08",             17,  cInt8,  "" ),   // 38: cChainSeq[7]
 	  
-	};
+	}; */
 
 	/*
 	//static final ParamInfo_t CParam2[gNumValueBars] = {
@@ -191,20 +180,5 @@ public class BlueParameters
 	}; */
 
 	
-	public static void dumpWithDescriptor(String msg, byte[] data, ParamInfo_t[] desc) {
-		int displ = 0;
-		int nParam = 0;
-		
-		System.out.println(msg);
-		
-		while(displ < data.length)
-		{
-			desc[nParam].dump(data[displ]);
-			
-			displ++;
-			nParam++;
-		}
-		
-	}
 	
 }

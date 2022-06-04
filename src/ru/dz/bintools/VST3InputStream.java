@@ -44,9 +44,9 @@ public class VST3InputStream
 		//byte[] restData = BinFileIO.readBytes(dis, dataSize);
 		
 		String rest4cc = BinFileIO.read4c(dis);
-		int restI1 = BinFileIO.readInt(dis);
+		int restI1 = BinFileIO.readInt(dis); // XML part file offset - long value?
 		int restI2 = BinFileIO.readInt(dis);
-		int restI3 = BinFileIO.readInt(dis);
+		int restI3 = BinFileIO.readInt(dis); // XML part size
 		int restI4 = BinFileIO.readInt(dis);
 		
 		System.out.printf("VST3 final part data %s %d %d %d %d\n", rest4cc, restI1, restI2, restI3, restI4 );

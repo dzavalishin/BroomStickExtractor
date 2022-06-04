@@ -53,8 +53,8 @@ public class BlueBroomMain
 	public static void main(String[] args)  
 	{
 		try {
-			VST3InputStream vis = new VST3InputStream(VST3_FILE);
-			System.exit(32);
+			//VST3InputStream vis = new VST3InputStream(VST3_FILE);
+			//System.exit(32);
 			
 			BlueFxp fxp = new BlueFxp();
 

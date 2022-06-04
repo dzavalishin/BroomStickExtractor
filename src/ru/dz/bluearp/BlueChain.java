@@ -19,30 +19,41 @@ public class BlueChain
 
 	private String name;
 	private byte[] chainSteps;
-	private byte[] chainParams;
+	//private byte[] chainParams;
+	ChainParametersTable params = new ChainParametersTable();
 
-	public BlueChain(String name, byte[] chainSteps, byte[] chainParams) {
+	public BlueChain(String name, byte[] chainSteps) { // , byte[] chainParams) {
 		this.name = name;
 		this.chainSteps = chainSteps;
-		this.chainParams = chainParams;
+		//this.chainParams = chainParams;
 
 		dump();
 	}
 
+	public BlueChain(String name, byte[] chainSteps, byte[] chainParams) {
+		this.name = name;
+		this.chainSteps = chainSteps;
+		params.setContents(chainParams);
+
+		dump();
+	}
+	
 	static private byte[] emptySteps = new byte[8];
-	static private byte[] defaultChainParams = new byte[5];
+	//static private byte[] defaultChainParams = new byte[5];
 	static {
 		Arrays.fill(emptySteps, (byte)-1);
 		
-		Arrays.fill(defaultChainParams, (byte)-1);
-		defaultChainParams[0] = 0;
+		//Arrays.fill(defaultChainParams, (byte)-1);
+		// TODO table defauls this to 1
+		//defaultChainParams[0] = 0;
 	}
 
 	/**
 	 * Create empty chain
 	 */
 	public BlueChain() {
-		this("(empty)", emptySteps, defaultChainParams );
+		//this("(empty)", emptySteps, defaultChainParams );
+		this("(empty)", emptySteps );
 	}
 
 
@@ -58,7 +69,8 @@ public class BlueChain
 		}
 		System.out.println();
 
-		BlueParameters.dumpWithDescriptor("Chain params", chainParams, BlueParameters.chnpDescriptors);
+		//BlueParameters.dumpWithDescriptor("Chain params", chainParams, BlueParameters.chnpDescriptors);
+		params.dump("Chain params");
 
 		
 	}
@@ -79,7 +91,8 @@ public class BlueChain
 		
 		int len = 0;
 		
-		len += BinFileIO.writeChunk( dos, "chnp", chainParams, BlueParameters.chnpDescriptors.length );
+		//len += BinFileIO.writeChunk( dos, "chnp", chainParams, BlueParameters.chnpDescriptors.length );
+		len += BinFileIO.writeChunk( dos, "chnp", params.getContents(), 0 );
 		len += BinFileIO.writeChunk( dos, "chns", chainSteps, 8 );
 		len += BinFileIO.writeFixedStringChunk( dos, "chnn", name, CHAIN_NAME_LEN ); 
 		

@@ -56,4 +56,27 @@ public class BlueParametersTable
 	public void setDefaultContents() {
 		this.contents = generateDefault();
 	}
+	
+	
+	
+	public static void dumpWithDescriptor(String msg, byte[] data, ParamInfo_t[] desc) {
+		int displ = 0;
+		int nParam = 0;
+		
+		System.out.println(msg);
+		
+		while(displ < data.length)
+		{
+			desc[nParam].dump(data[displ]);
+			
+			displ++;
+			nParam++;
+		}
+		
+	}
+	
+	public void dump(String msg) {
+		dumpWithDescriptor( msg, contents, def);
+	}
+	
 }
