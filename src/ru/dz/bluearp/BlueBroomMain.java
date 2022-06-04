@@ -12,7 +12,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
-import ru.dz.bintools.VST3InputStream;
+import ru.dz.bintools.VST3Reader;
 
 public class BlueBroomMain 
 {
@@ -53,7 +53,7 @@ public class BlueBroomMain
 	public static void main(String[] args)  
 	{
 		try {
-			VST3InputStream vis = new VST3InputStream(VST3_FILE);
+			VST3Reader vis = new VST3Reader(VST3_FILE);
 			System.exit(32);
 			
 			BlueFxp fxp = new BlueFxp();

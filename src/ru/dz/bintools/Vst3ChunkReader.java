@@ -10,14 +10,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-public class Vst3Chunk {
+public class Vst3ChunkReader {
 
 	private String id;
 	private long offset;
 	private long size;
 	private byte[] data;
 
-	public Vst3Chunk(String id, long offset, long size) {
+	public Vst3ChunkReader(String id, long offset, long size) {
 		this.id = id;
 		this.offset = offset;
 		this.size = size;
