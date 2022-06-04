@@ -38,11 +38,13 @@ public class BlueFxp
 	
 	private List<BlueProg> programs = new ArrayList<BlueProg>();
 	private List<BlueChain> chains = new ArrayList<BlueChain>();
+	
+	FixedParametersTable fixedParameters = new FixedParametersTable();
 
 	// Temps used to construct chain
 	private byte[] chainSteps;
 	private byte[] chainParams;
-	private byte[] fixpData;
+	//private byte[] fixpData;
 	private byte[] fpgpData;
 
 	
@@ -126,7 +128,7 @@ public class BlueFxp
 	}
 
 
-	private void decodeChunk(String name, byte[] data) 
+	private void decodeChunk(String name, byte[] data) throws IOException 
 	{
 		System.out.printf("decode %s size %d\n", name, data.length);
 
@@ -169,11 +171,15 @@ public class BlueFxp
 		chains.add(chain);
 	}
 
-	private void decodeFixp(byte[] data) {
+	private void decodeFixp(byte[] data) throws IOException {
 		// BinFileIO.dump("Fixp ", data);	
-		fixpData = data;		
+		//fixpData = data;		
 		// TODO 
 		//BlueParameters.dumpWithDescriptor("Fixp ", data,BlueParameters.fixpDescriptors);
+		fixedParameters.setContents(data);
+		fixedParameters.dump("Fixp ");
+		
+		fixedParameters.checkSanity();
 	}
 
 
@@ -225,7 +231,9 @@ public class BlueFxp
 		 * <li> 128 prog
 		 */
 		
-		BinFileIO.writeChunk( dos, "fixp", fixpData, BlueParameters.fixpDescriptors.length );
+		//BinFileIO.writeChunk( dos, "fixp", fixpData, BlueParameters.fixpDescriptors.length );
+		BinFileIO.writeChunk( dos, "fixp", fixedParameters.getContents(), 0 );
+		
 		BinFileIO.writeChunk( dos, "fpgp", fpgpData, BlueParameters.fpgpDescriptors.length );
 		
 		

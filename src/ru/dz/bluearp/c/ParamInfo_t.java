@@ -32,8 +32,9 @@ public class ParamInfo_t {
 	}
 
 	public void dump(int param) {
-		System.out.printf("\t%s = %d%s\n", name, param, suff);
-		
+		if( (name == null) || name.length() == 0 )
+			return;
+		System.out.printf("\t%s = %d%s\n", name, param, suff);	
 	}
 
 	public int getDefault() { return deflt; }

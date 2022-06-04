@@ -13,7 +13,7 @@ public class BlueParameters implements BlueDefs
 	// unused params should have Max = 0
 
 
-	
+	/*
 	static final ParamInfo_t fixpDescriptors[] = 
 		{
 			// FIXED PARAMS (PATCH INDEPENDENT) ------------------------------------------------ fixp
@@ -41,7 +41,7 @@ public class BlueParameters implements BlueDefs
 			  new ParamInfo_t(  0,       2,     1,      0,    0,    2,    "Send bank msg",            24,  cInt8,  "" ),   // 18: cSendBankMsg
 			  new ParamInfo_t(  0,       1,     1,      0,    0,    5,    "Chain restart on sw.",      2,  cInt8,  "" ),   // 19: cChainRestart
 		};
-
+	*/
 	
 	static final ParamInfo_t fpgpDescriptors[] = 
 		{
