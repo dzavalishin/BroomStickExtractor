@@ -12,12 +12,15 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+import ru.dz.bintools.VST3InputStream;
+
 public class BlueBroomMain 
 {
 	//private static final String MIDI_FILE = "G:\\Projects\\BroomStickExtractor\\midi\\Disco_Octaves.mid";
 	//private static final String MIDI_FILE = "midi/Disco_Octaves.mid";
 	private static final String MIDI_FILE = "midi/Classic_Disco.mid";
 	private static final String FXP_FILE = "bluearp/BlueARP_FactoryBank.fxb";
+	private static final String VST3_FILE = "bluearp/dzBlueArpTest.vstpreset";
 	
 	private static final boolean printDetails = true;
 	private static final boolean printOff = false;
@@ -50,6 +53,9 @@ public class BlueBroomMain
 	public static void main(String[] args)  
 	{
 		try {
+			VST3InputStream vis = new VST3InputStream(VST3_FILE);
+			System.exit(32);
+			
 			BlueFxp fxp = new BlueFxp();
 
 			fxp.load(FXP_FILE);

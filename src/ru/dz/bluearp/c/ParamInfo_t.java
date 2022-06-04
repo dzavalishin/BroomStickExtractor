@@ -35,5 +35,7 @@ public class ParamInfo_t {
 		System.out.printf("\t%s = %d%s\n", name, param, suff);
 		
 	}
+
+	public int getDefault() { return deflt; }
 	
 }
