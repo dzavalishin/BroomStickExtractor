@@ -23,7 +23,7 @@ public class ArpStep
 	public ArpStep() {
 		// TODO Auto-generated constructor stub
 		octave = 8;
-		type = 1;
+		type = 2; // default entry is rest
 		key = 4;
 	}
 	

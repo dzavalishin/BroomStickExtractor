@@ -217,11 +217,15 @@ public class MidiTrackParser
 			
 			System.out.println("Part "+i+", "+part.size()+" events "+ pbars+" bars, BlueArp step size = 1/"+arpStepSize);
 			
-			part.dump(midiParser.getSignature());
+			//part.dump(midiParser.getSignature());
 			
 			BlueProg bluep = new BlueProg();
 			bluep.convertFrom( part, signature );
 			
+			
+			bluep.setName( midiParser.getPresetName() + "/" + name + "/" + i );
+			
+			bluep.dump();
 		}
 	}
 

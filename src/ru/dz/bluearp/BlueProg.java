@@ -44,10 +44,15 @@ public class BlueProg
 		//dump();
 	}
 
-	private void dump() {
+	public void dump() {
 		System.out.printf("Program '%s'\n", name);
 		for( ArpStep as : steps )
-			as.dump();
+		{
+			if(as != null )
+				as.dump();
+			else
+				System.out.println("(null)");
+		}
 
 	}
 
@@ -156,6 +161,10 @@ public class BlueProg
 
 		int maxExtra[] = {0};
 		int countExtra[] = {0};
+
+		for(int p = 0; p < N_PROG_STEPS; p++)
+			steps[p] = new ArpStep();
+		
 		
 		part.forEach(signature, (mbb, note) -> {
 			int pos = (int) (note.getStartTick() / stepTicks);
@@ -183,6 +192,10 @@ public class BlueProg
 			System.err.println("Inexact positions for "+countExtra[0]+" steps, max="+maxExtra[0]);
 		}
 		
+	}
+
+	public void setName(String name) {
+		this.name = name;		
 	}
 
 }
