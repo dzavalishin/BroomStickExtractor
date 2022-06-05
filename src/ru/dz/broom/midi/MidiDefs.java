@@ -1,4 +1,4 @@
-package ru.dz.bluearp;
+package ru.dz.broom.midi;
 
 public class MidiDefs {
 

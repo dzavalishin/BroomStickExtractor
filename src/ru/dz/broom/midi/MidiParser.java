@@ -1,4 +1,4 @@
-package ru.dz.bluearp;
+package ru.dz.broom.midi;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,10 +109,10 @@ public class MidiParser
 		switch(mm.getType())
 		{
 		case 47:	System.out.print("(stop)"); break;
-		case 3:		System.out.print("(track name '"+getString(mm)+"')"); break;
+		case 3:		System.out.print("(track name '"+MidiTools.getString(mm)+"')"); break;
 		
 		case 0x51:	
-			long bpm = 60 * 1000 * 1000 / getInt3(mm);
+			long bpm = 60 * 1000 * 1000 / MidiTools.getInt3(mm);
 			System.out.print("(tempo "+bpm+" BPM)"); 
 			break;
 		
@@ -156,22 +156,6 @@ public class MidiParser
 		*/
 	}
 
-	private static int getInt3(MetaMessage mm) 
-	{
-		int r = 0;
-		
-		byte[] b = mm.getData();
-		
-		r |= ((int)b[2]) & 0xFF;
-		r |= (((int)b[1]) & 0xFF) << 8;
-		r |= (((int)b[0]) & 0xFF) << 16;
-		
-		return r;
-	}
-
-	private static String getString(MetaMessage mm) {		
-		return new String(mm.getData());
-	}
 
 	private static void printMidiNote(ShortMessage sm, String msg, MidiEvent event) 
 	{		
@@ -186,6 +170,7 @@ public class MidiParser
 				return;
 		}
 		
+		
 		//System.out.print("@" + event.getTick() + " ");
 		//System.out.print("@" + tickToMeasure(event.getTick()) + " ");
 		
@@ -195,10 +180,14 @@ public class MidiParser
 		System.out.println("Note "+msg+", " + noteName + octave + " key=" + key + " velocity: " + velocity);
 		*/
 		
+		
+		//String ttm = tickToMeasure(event.getTick());
+		String ttm = tickTo32nd(event.getTick());
+		
 		if( !printOff )
-			System.out.printf("%10s ch %2d  %-2s%d  vel %3d\n", tickToMeasure(event.getTick()), sm.getChannel(), noteName, octave, velocity );
+			System.out.printf("%10s ch %2d  %-2s%d  vel %3d\n", ttm, sm.getChannel(), noteName, octave, velocity );
 		else
-			System.out.printf("%10s ch %2d  note %-3s %-2s%d  vel %3d\n", tickToMeasure(event.getTick()), sm.getChannel(), msg, noteName, octave, velocity );
+			System.out.printf("%10s ch %2d  note %-3s %-2s%d  vel %3d\n", ttm, sm.getChannel(), msg, noteName, octave, velocity );
 	}
 
 	private static void printMidiNoteShort(ShortMessage sm) 
@@ -217,10 +206,10 @@ public class MidiParser
 		long beats = tick/ticksPerBeat;
 		int extraTicks = (int) (tick % ticksPerBeat);
 
-		int betasPerMeasure = 32/n32PerBeat;
+		int beatsPerMeasure = 32/n32PerBeat;
 		
-		int measures = (int) (beats/betasPerMeasure);
-		int extraBeats= (int) (beats%betasPerMeasure);
+		int measures = (int) (beats/beatsPerMeasure);
+		int extraBeats= (int) (beats%beatsPerMeasure);
 		
 		StringBuilder sb = new StringBuilder();
 		
@@ -230,5 +219,38 @@ public class MidiParser
 		
 		return sb.toString();
 	}
+
+	
+	private static String tickTo32nd(long tick)
+	{
+		//int sliceSize = 32; // 1/32
+		int sliceSize = 16; // 1/32
+		int ticksPerSlice = ticksPerBeat / n32PerBeat;
+		
+		ticksPerSlice *= 32;
+		ticksPerSlice /= sliceSize;
+		
+		long slices = tick/ticksPerSlice;
+		int extraTicks = (int) (tick % ticksPerSlice);
+		
+		
+		int measures = (int) (slices/sliceSize);
+		int extraBeats= (int) (slices%sliceSize);
+		
+		/*
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("" + measures + "." + extraBeats+" 1/"+sliceSize );
+		if(extraTicks != 0)
+			sb.append(" (+" +extraTicks+")");
+		
+		return sb.toString();
+		*/
+
+		String extra = (extraTicks != 0) ? (" (+" +extraTicks+")") : "";
+
+		return String.format("%3d.%2d 1/%d %6s", measures, extraBeats, sliceSize, extra );
+	}
+
 	
 }

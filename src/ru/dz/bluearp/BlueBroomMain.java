@@ -6,6 +6,7 @@ import javax.sound.midi.InvalidMidiDataException;
 
 import ru.dz.bintools.VST3Reader;
 import ru.dz.bintools.VST3Writer;
+import ru.dz.broom.midi.MidiParser;
 
 public class BlueBroomMain 
 {
