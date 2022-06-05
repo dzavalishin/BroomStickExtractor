@@ -1,6 +1,8 @@
 package ru.dz.broom.midi;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -14,10 +16,25 @@ import java.util.TreeSet;
 
 public class SpanSet {
 	
-	private Set<TickAndKey> spans = new TreeSet<>();
+	private Map<TickAndKey,MidiNoteSpan> spans = new TreeMap<>();
 
 	public void add(MidiNoteSpan s)
 	{
+		TickAndKey tk = new TickAndKey(s, s.getStartTick());
+		spans.put(tk,s);
+	}
+
+	public int size() {
+		return spans.size();
+	}
+
+	public void dump(MidiSignature sig) {
+		spans.forEach( (tk,s) -> {
+			MidiBarBeat mbb = new MidiBarBeat(tk.getTick(),32,sig); 
+			//System.out.println("Span "+s+" @"+mbb);
+			System.out.println(""+s+" @"+mbb);
+
+		});
 		
 	}
 	
@@ -37,6 +54,8 @@ class TickAndKey implements Comparable<TickAndKey>
 		this.tick = tick;
 	}
 
+	public long getTick() {		return tick;	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof TickAndKey) {
@@ -50,13 +69,13 @@ class TickAndKey implements Comparable<TickAndKey>
 	@Override
 	public int compareTo(TickAndKey o) {
 		
-		if(o.tick != tick)
+		if(tick != o.tick)
 		{
-			if( o.tick > tick ) return 1;
+			if( tick > o.tick ) return 1;
 			return -1;
 		}
 		
-		return o.key - key;
+		return key - o.key;
 	}
 
 	

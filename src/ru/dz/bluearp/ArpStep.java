@@ -12,7 +12,7 @@ public class ArpStep
 
 	private int scaleStep;
 	private int octave;
-	private int parm2;
+	//private int parm2;
 	private int key;
 	private int velocity;
 	private int gateTime;
@@ -75,7 +75,7 @@ public class ArpStep
 	
 	public void dump() {
 		System.out.printf("\t step %3d %3d %3d %3d %3d %3d\n", 
-				scaleStep, octave, parm2, key, velocity, gateTime
+				scaleStep, octave, type, key, velocity, gateTime
 				);
 		
 	}

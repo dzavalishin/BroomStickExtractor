@@ -34,5 +34,7 @@ public class MidiNoteSpan extends GenericNote
 	
 	public long getTicks() { checkComplete(); return endTick - startTick; }
 
+	public long getStartTick() { return startTick; }
+
 
 }

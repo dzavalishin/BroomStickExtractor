@@ -36,6 +36,7 @@ public class BlueBroomMain
 			
 
 			MidiParser mp = new MidiParser(MIDI_FILE);
+			mp.dump();
 			
 			BlueBank bb = new BlueBank();
 			

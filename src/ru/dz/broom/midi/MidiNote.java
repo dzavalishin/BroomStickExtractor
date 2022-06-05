@@ -35,7 +35,8 @@ public class MidiNote extends GenericNote
 	@Override
 	public String toString() {		
 		String off = isOff() ? " off" : "";
-		return String.format("%-2s%d  ch %2d vel %3d%s", getNoteName(), getOctave(), getChannel(), getVelocity(), off );
+		//return String.format("%-2s%d  ch %2d vel %3d%s", getNoteName(), getOctave(), getChannel(), getVelocity(), off );
+		return super.toString()+off;
 	}
 
 	public String toShortString() {		

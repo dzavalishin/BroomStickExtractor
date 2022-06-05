@@ -36,35 +36,6 @@ public class MidiBarBeat {
 		beats= (int) (slices%sliceSize);
 	}
 	
-	private String tickTo32nd(long tick)
-	{
-		MidiSignature sig = midiParser.getSignature();
-		
-		//int sliceSize = 32; // 1/32
-		int sliceSize = 16; // 1/32
-		int ticksPerSlice = sig.getTicksPerBeat() / sig.getN32PerBeat();
-		
-		ticksPerSlice *= 32;
-		ticksPerSlice /= sliceSize;
-		
-		long slices = tick/ticksPerSlice;
-		int extraTicks = (int) (tick % ticksPerSlice);
-		
-		
-		int measures = (int) (slices/sliceSize);
-		int extraBeats= (int) (slices%sliceSize);
-		
-		/*
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("" + measures + "." + extraBeats+" 1/"+sliceSize );
-		if(extraTicks != 0)
-			sb.append(" (+" +extraTicks+")");
-		
-		return sb.toString();
-		*/
-
-	}
 	
 	@Override
 	public String toString() {

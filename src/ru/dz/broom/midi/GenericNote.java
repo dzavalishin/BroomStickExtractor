@@ -2,7 +2,8 @@ package ru.dz.broom.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class GenericNote {
+public class GenericNote 
+{
 	private int key;
 	
 	private int note;
@@ -53,4 +54,10 @@ public class GenericNote {
 	public int getChannel() {		return channel;	}
 	public void setChannel(int channel) {		this.channel = channel;	}
 	
+
+	@Override
+	public String toString() {		
+		return String.format("%-2s%d  ch %2d vel %3d", getNoteName(), getOctave(), getChannel(), getVelocity() );
+	}
+
 }

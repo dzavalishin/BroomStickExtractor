@@ -10,6 +10,7 @@ import javax.sound.midi.Track;
 
 public class MidiTrackParser 
 {
+	private static final boolean debugPrint = false;
 	private static final boolean printDetails = true;
 	private static final boolean printOff = false;
 	
@@ -24,16 +25,16 @@ public class MidiTrackParser
 	}
 
 
-	public void parseMidiTrack(Track track) {
-		System.out.println("Track " + trackNumber + ": size = " + track.size());
-		System.out.println();
+	public void parse(Track track) {
+		if(debugPrint) System.out.println("Track " + trackNumber + ": size = " + track.size());
+		if(debugPrint) System.out.println();
 		for (int i=0; i < track.size(); i++) 
 		{ 
 			MidiEvent event = track.get(i);
 			parseMidiEvent(event);
 		}
 
-		System.out.println();
+		if(debugPrint) System.out.println();
 	}
 
 	
@@ -70,22 +71,24 @@ public class MidiTrackParser
 	{
 		final byte[] b = mm.getData();
 		
-		System.out.print("Meta message type: " + mm.getType()+" ");
+		if(debugPrint) System.out.print("Meta message type: " + mm.getType()+" ");
 		switch(mm.getType())
 		{
-		case 47:	System.out.print("(stop)"); break;
+		case 47:	
+			if(debugPrint) System.out.print("(stop)"); 
+			break;
 		case 3:		
 		{
 			String mmName = MidiTools.getString(mm);
 			if( trackNumber == 0 )
 			{
 				midiParser.setPresetName(mmName);
-				System.out.print("(preset name '"+mmName+"')");
+				if(debugPrint) System.out.print("(preset name '"+mmName+"')");
 			}
 			else
 			{
 				this.name = mmName;
-				System.out.print("(track name '"+name+"')");
+				if(debugPrint) System.out.print("(track name '"+name+"')");
 			}
 		}
 			break;
@@ -127,16 +130,16 @@ public class MidiTrackParser
 	}
 
 
-	private static SpanSet ss = new SpanSet();
-	private static Map<Integer,MidiNoteSpan> playingNotes = new TreeMap<>();
+	private SpanSet ss = new SpanSet();
+	private Map<Integer,MidiNoteSpan> playingNotes = new TreeMap<>();
 	
 	private void parseMidiNote(ShortMessage sm, MidiEvent event) 
 	{
 		MidiNote note = new MidiNote(sm);
 		long tick = event.getTick();
 
-		//String ttm = tickToMeasure(event.getTick());
-		String ttm = tickTo32nd(tick);
+		MidiBarBeat mbb = new MidiBarBeat(tick, 32, midiParser.getSignature());
+		String ttm = mbb.toString();
 		
 		if (note.isOn())
 		{
@@ -163,6 +166,8 @@ public class MidiTrackParser
 				System.err.printf("off for no on: %s @%s\n", note.toString(), ttm );
 		}
 		
+		if(!debugPrint) return;
+		
 		if( !printOff ) 
 			if (note.isOff())	
 				return;		
@@ -174,51 +179,19 @@ public class MidiTrackParser
 			System.out.print(note.toShortString() + " ");
 	}
 
-	
-	/*
-	private String tickToMeasure(long tick)
-	{
-		MidiSignature sig = midiParser.getSignature();
-		
-		long beats = tick/sig.getTicksPerBeat();
-		int extraTicks = (int) (tick % sig.getTicksPerBeat());
 
-		int beatsPerMeasure = 32/sig.getN32PerBeat();
+	public void dump() 
+	{
+		if(null == name) return; // track 0 is for set up only, no events 
 		
-		int measures = (int) (beats/beatsPerMeasure);
-		int extraBeats= (int) (beats%beatsPerMeasure);
+		if("Metronome".equals(name)) return;
+		if("M/W".equals(name)) return; // mod wheel
 		
-		StringBuilder sb = new StringBuilder();
+		System.out.println("Track "+name+", "+ss.size()+" events");
+		ss.dump(midiParser.getSignature());
+
 		
-		sb.append("" + measures + "." + extraBeats );
-		if(extraTicks != 0)
-			sb.append("(+" +extraTicks+")");
-		
-		return sb.toString();
 	}
 
 	
-	private String tickTo32nd(long tick)
-	{
-		MidiSignature sig = midiParser.getSignature();
-		
-		//int sliceSize = 32; // 1/32
-		int sliceSize = 16; // 1/32
-		int ticksPerSlice = sig.getTicksPerBeat() / sig.getN32PerBeat();
-		
-		ticksPerSlice *= 32;
-		ticksPerSlice /= sliceSize;
-		
-		long slices = tick/ticksPerSlice;
-		int extraTicks = (int) (tick % ticksPerSlice);
-		
-		
-		int measures = (int) (slices/sliceSize);
-		int extraBeats= (int) (slices%sliceSize);
-		
-		String extra = (extraTicks != 0) ? (" (+" +extraTicks+")") : "";
-
-		return String.format("%3d.%2d /%d %6s", measures, extraBeats, sliceSize, extra );
-	}
-	*/
 }

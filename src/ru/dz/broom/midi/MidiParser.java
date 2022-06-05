@@ -2,6 +2,8 @@ package ru.dz.broom.midi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -14,6 +16,7 @@ public class MidiParser
 	private MidiSignature signature = null;
 	private String presetName = "(unnamed)";
 	
+	private List<MidiTrackParser> tracks = new ArrayList<>();
 	
 	public MidiParser(String midiFile) throws InvalidMidiDataException, IOException {
 		sequence = MidiSystem.getSequence(new File(midiFile));
@@ -30,7 +33,8 @@ public class MidiParser
 			
 			MidiTrackParser mtp = new MidiTrackParser(trackNumber, this);
 			
-			mtp.parseMidiTrack(track);
+			mtp.parse(track);
+			tracks.add(mtp);
 
 			trackNumber++;
 		}
@@ -57,6 +61,17 @@ public class MidiParser
 
 	public String getPresetName() {		return presetName;	}
 	public void setPresetName(String presetName) {		this.presetName = presetName;	}
+
+
+	public void dump() 
+	{
+		System.out.println("Preset "+presetName+", "+tracks.size()+" tracks");
+		for( MidiTrackParser t : tracks )
+		{
+			t.dump();
+		}
+		
+	}
 
 
 	
