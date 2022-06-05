@@ -158,17 +158,21 @@ public class MidiParser
 
 
 	private static void printMidiNote(ShortMessage sm, String msg, MidiEvent event) 
-	{		
+	{
+		/*
 		int key = sm.getData1();
 		int octave = (key / 12)-1;
 		int note = key % 12;
 		String noteName = MidiDefs.NOTE_NAMES[note];
 		int velocity = sm.getData2();
+		*/
 		
-		if( !printOff ) {
-			if (velocity == 0)
+		MidiNote n = new MidiNote(sm);
+		
+		if( !printOff ) 
+			if (n.isOff())	
 				return;
-		}
+		
 		
 		
 		//System.out.print("@" + event.getTick() + " ");
@@ -183,11 +187,14 @@ public class MidiParser
 		
 		//String ttm = tickToMeasure(event.getTick());
 		String ttm = tickTo32nd(event.getTick());
-		
+		/*
 		if( !printOff )
 			System.out.printf("%10s ch %2d  %-2s%d  vel %3d\n", ttm, sm.getChannel(), noteName, octave, velocity );
 		else
 			System.out.printf("%10s ch %2d  note %-3s %-2s%d  vel %3d\n", ttm, sm.getChannel(), msg, noteName, octave, velocity );
+			*/
+		
+		System.out.printf("%10s %s\n", ttm, n.toString() );
 	}
 
 	private static void printMidiNoteShort(ShortMessage sm) 

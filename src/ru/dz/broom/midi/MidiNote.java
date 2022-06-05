@@ -10,8 +10,8 @@ public class MidiNote
 	private int octave;
 	
 	private int velocity;
-
 	private int type;
+	private int channel;
 
 
 	
@@ -20,6 +20,7 @@ public class MidiNote
 		setKey( sm.getData1() );
 		velocity = sm.getData2();
 		type = sm.getCommand();
+		setChannel(sm.getChannel());
 		
 		switch (type) {
 		case MidiDefs.NOTE_ON:
@@ -61,5 +62,16 @@ public class MidiNote
 	public int getVelocity() {		return velocity;	}
 	public void setVelocity(int velocity) {		this.velocity = velocity;	}
 	
-	
+	public int getChannel() {		return channel;	}
+	public void setChannel(int channel) {		this.channel = channel;	}
+
+	public boolean isOn() { return type == MidiDefs.NOTE_ON; }
+	public boolean isOff() { return type == MidiDefs.NOTE_OFF; }
+
+	@Override
+	public String toString() {		
+		String off = isOff() ? " off" : "";
+		return String.format("%-2s%d  ch %2d vel %3d%s", getNoteName(), octave, getChannel(), velocity, off );
+	}
+
 }
