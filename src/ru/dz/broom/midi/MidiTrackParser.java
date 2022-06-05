@@ -175,7 +175,7 @@ public class MidiTrackParser
 	}
 
 	
-	
+	/*
 	private String tickToMeasure(long tick)
 	{
 		MidiSignature sig = midiParser.getSignature();
@@ -216,19 +216,9 @@ public class MidiTrackParser
 		int measures = (int) (slices/sliceSize);
 		int extraBeats= (int) (slices%sliceSize);
 		
-		/*
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("" + measures + "." + extraBeats+" 1/"+sliceSize );
-		if(extraTicks != 0)
-			sb.append(" (+" +extraTicks+")");
-		
-		return sb.toString();
-		*/
-
 		String extra = (extraTicks != 0) ? (" (+" +extraTicks+")") : "";
 
 		return String.format("%3d.%2d /%d %6s", measures, extraBeats, sliceSize, extra );
 	}
-	
+	*/
 }
