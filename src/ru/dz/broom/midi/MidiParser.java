@@ -13,16 +13,18 @@ import javax.sound.midi.Track;
 public class MidiParser 
 {
 	private Sequence sequence;
-	private MidiSignature signature = null;
+	private MidiSignature signature = MidiSignature.getDefault();
 	private String presetName = "(unnamed)";
 	
 	private List<MidiTrackParser> tracks = new ArrayList<>();
-	private long tempo;
+	private long tempo = 120;
+	private int resolution;
 	
 	public MidiParser(String midiFile) throws InvalidMidiDataException, IOException {
 		sequence = MidiSystem.getSequence(new File(midiFile));
+		resolution = sequence.getResolution();
+		signature.setTicksPerBeat(resolution);
 		parseSequence(sequence);
-
 	}
 	
 	
@@ -51,12 +53,15 @@ public class MidiParser
 
 
 	public void setSignature(MidiSignature signature) {
-		if(signature != null)
+		/*if(signature != null)
 		{
 			System.err.println("Double signature: "+signature.toString());
 			//throw new RuntimeException("Double signature");
-		}
+		}*/
 		this.signature = signature;
+
+		resolution = sequence.getResolution();
+		signature.setTicksPerBeat(resolution);
 	}
 
 
@@ -66,6 +71,7 @@ public class MidiParser
 
 	public void dump() 
 	{
+		System.out.println("Sequence ticks per beat "+getResolution());
 		System.out.println("Preset "+presetName+", "+tracks.size()+" tracks");
 		System.out.println("Signature "+signature+" tempo "+tempo);
 		for( MidiTrackParser t : tracks )
@@ -78,6 +84,11 @@ public class MidiParser
 
 	public void setTempo(long tempo) {
 		this.tempo = tempo;
+	}
+
+
+	public int getResolution() {
+		return resolution;
 	}
 
 

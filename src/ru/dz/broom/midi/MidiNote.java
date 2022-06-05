@@ -29,6 +29,12 @@ public class MidiNote extends GenericNote
 	}
 	
 
+	public MidiNote(MidiNote s) {
+		super(s);
+		type = s.type;
+	}
+
+
 	public boolean isOn() { return type == MidiDefs.NOTE_ON; }
 	public boolean isOff() { return type == MidiDefs.NOTE_OFF; }
 

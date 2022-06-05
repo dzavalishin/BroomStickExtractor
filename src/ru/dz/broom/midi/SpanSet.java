@@ -1,9 +1,8 @@
 package ru.dz.broom.midi;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.function.BiConsumer;
 
 /**
  * 
@@ -20,7 +19,8 @@ public class SpanSet {
 
 	public void add(MidiNoteSpan s)
 	{
-		TickAndKey tk = new TickAndKey(s, s.getStartTick());
+		//TickAndKey tk = new TickAndKey(s, s.getStartTick());
+		TickAndKey tk = new TickAndKey(s);
 		spans.put(tk,s);
 	}
 
@@ -30,7 +30,7 @@ public class SpanSet {
 
 	public void dump(MidiSignature sig) {
 		spans.forEach( (tk,s) -> {
-			MidiBarBeat mbb = new MidiBarBeat(tk.getTick(),32,sig); 
+			MidiBarBeat mbb = new MidiBarBeat(tk.getTick(), 64, sig); 
 			//System.out.println("Span "+s+" @"+mbb);
 			System.out.println(""+s+" @"+mbb);
 
@@ -38,7 +38,7 @@ public class SpanSet {
 		
 	}
 
-	int maxBar(MidiSignature sig)
+	public int maxBar(MidiSignature sig)
 	{
 		int [] maxBar = {-1};
 		spans.forEach( (tk,s) -> {
@@ -51,6 +51,50 @@ public class SpanSet {
 		});
 		
 		return maxBar[0];
+	}
+
+	/**
+	 * 
+	 * @param parts split self in such a number of parts
+	 * @param nPart return this part
+	 * @param sig 
+	 * @return Copy of part of self
+	 */
+	public SpanSet split(int parts, int nPart, MidiSignature sig) {
+		int bars = 1 + maxBar(sig);
+		int barsPerPart = bars / parts;
+		
+		int startBar = barsPerPart * nPart; // >=
+		int endBar = startBar + barsPerPart;  // <
+		
+		SpanSet ret[] = { new SpanSet() };
+		
+		spans.forEach( (tk,s) -> {
+			MidiBarBeat mbb = new MidiBarBeat(tk.getTick(),32,sig);
+			int bar = mbb.getBar();
+
+			MidiNoteSpan ns = new MidiNoteSpan(s);
+			ns.shiftLeftBars(startBar,sig);
+			TickAndKey ntk = new TickAndKey(ns);
+			
+			if( (bar >= startBar) && (bar < endBar) )
+				ret[0].spans.put(ntk, ns);
+
+			//MidiBarBeat mbb = new MidiBarBeat(tk.getTick(), 64, sig); 
+			//System.out.println(""+ns+" @"+mbb);
+					
+		});
+		
+		
+		return ret[0];
+	}
+
+	public void forEach(MidiSignature sig, BiConsumer<MidiBarBeat,MidiNoteSpan> c) {
+		spans.forEach( (tk,s) -> {
+			MidiBarBeat mbb = new MidiBarBeat(tk.getTick(), 64, sig); 
+			c.accept(mbb,s);
+		});
+		
 	}
 	
 }
@@ -66,6 +110,13 @@ class TickAndKey implements Comparable<TickAndKey>
 		key = note.getKey();
 		this.tick = tick;
 	}
+
+	public TickAndKey(MidiNoteSpan s) {
+		key = s.getKey();
+		this.tick = s.getStartTick();
+	}
+	
+	
 
 	public long getTick() {		return tick;	}
 

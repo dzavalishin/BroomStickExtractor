@@ -6,10 +6,12 @@ import java.io.IOException;
 
 import ru.dz.bintools.BinFileIO;
 import ru.dz.bintools.ChunkOutputStream;
+import ru.dz.broom.midi.MidiSignature;
+import ru.dz.broom.midi.SpanSet;
 
 public class BlueProg 
 {
-	private static final int N_PROG_STEPS = 64;
+	public static final int N_PROG_STEPS = 64;
 	private static final int PROGRAM_NAME_LEN = 16*3;
 	
 	private String name = "(unnamed)";
@@ -142,6 +144,45 @@ public class BlueProg
 		}
 		
 		return data;
+	}
+
+	public void convertFrom(SpanSet part, MidiSignature signature) 
+	{
+		int pbars = 1 + part.maxBar(signature);
+
+		int arpStepSize = BlueProg.N_PROG_STEPS / pbars; // Arp step = 1/arpStepSize
+
+		int stepTicks = signature.getTicksPerBar() / arpStepSize;		
+
+		int maxExtra[] = {0};
+		int countExtra[] = {0};
+		
+		part.forEach(signature, (mbb, note) -> {
+			int pos = (int) (note.getStartTick() / stepTicks);
+			int extraTicks = (int) (note.getStartTick() % stepTicks);
+			
+			if(extraTicks != 0)
+			{
+				maxExtra[0] = Math.max(maxExtra[0], extraTicks);
+				countExtra[0]++;
+			}
+			
+			if(pos >= N_PROG_STEPS)
+			{
+				System.err.println("Step "+pos+" > N_PROG_STEPS");
+			}
+			else
+			{
+				steps[pos] = new ArpStep(note);
+			}
+			
+		} );
+		
+		if(countExtra[0] > 0)
+		{
+			System.err.println("Inexact positions for "+countExtra[0]+" steps, max="+maxExtra[0]);
+		}
+		
 	}
 
 }

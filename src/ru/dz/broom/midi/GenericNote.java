@@ -19,7 +19,8 @@ public class GenericNote
 	}
 
 
-	public GenericNote(MidiNote inote) {
+	//public GenericNote(MidiNote inote) {
+	public GenericNote(GenericNote inote) {
 		setKey( inote.getKey() );
 		setVelocity( inote.getVelocity() );
 		setChannel( inote.getChannel());

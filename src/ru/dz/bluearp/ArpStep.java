@@ -1,5 +1,7 @@
 package ru.dz.bluearp;
 
+import ru.dz.broom.midi.MidiNoteSpan;
+
 /** 
  * 
  * BlueArp sequence step definition.
@@ -25,6 +27,14 @@ public class ArpStep
 		key = 4;
 	}
 	
+	public ArpStep(MidiNoteSpan note) {
+		type = 1;
+		key = 4; // k1
+		velocity = note.getVelocity();
+		scaleStep = note.getNoteDiffToC();
+		// TODO 
+	}
+
 	public void loadBinary(int stepType, byte val) 
 	{
 		int v = val & 0xFF;

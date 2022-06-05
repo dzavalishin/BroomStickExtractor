@@ -8,8 +8,12 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 
+import ru.dz.bluearp.BlueProg;
+
 public class MidiTrackParser 
 {
+	private static final int VARIATIONS = 8; // Each MIDI track contains 8 different pattern variations
+	
 	private static final boolean debugPrint = false;
 	private static final boolean printDetails = true;
 	private static final boolean printOff = false;
@@ -133,6 +137,7 @@ public class MidiTrackParser
 
 	private SpanSet ss = new SpanSet();
 	private Map<Integer,MidiNoteSpan> playingNotes = new TreeMap<>();
+	private boolean hasNoteOverlaps = false;
 	
 	private void parseMidiNote(ShortMessage sm, MidiEvent event) 
 	{
@@ -146,7 +151,11 @@ public class MidiTrackParser
 		{
 			MidiNoteSpan span = new MidiNoteSpan(note, tick);
 			
+			
 			//checkNotePlays(note);
+			
+			// We add note while other one is still on
+			if(!playingNotes.isEmpty()) hasNoteOverlaps = true;
 			
 			playingNotes.put(note.getKey(), span);
 		}
@@ -188,11 +197,32 @@ public class MidiTrackParser
 		if("Metronome".equals(name)) return;
 		if("M/W".equals(name)) return; // mod wheel
 		
-		int bars = ss.maxBar(midiParser.getSignature());
-		System.out.println("Track "+name+", "+ss.size()+" events "+ bars+" bars, "+bars/8+" per part");
-		ss.dump(midiParser.getSignature());
-
+		MidiSignature signature = midiParser.getSignature();
 		
+		int bars = 1 + ss.maxBar(signature);
+		String monopoly = hasNoteOverlaps ? "polyphonic" : "monophonic";
+		
+		System.out.println("Track '"+name+"', "+ss.size()+" events "+ bars+" bars, "+bars/8+" per part, "+monopoly);
+		
+		//ss.dump(midiParser.getSignature());
+
+		SpanSet[] parts = new SpanSet[VARIATIONS]; 
+		for(int i = 0; i < VARIATIONS; i++)
+		{
+			SpanSet part = ss.split( VARIATIONS, i, signature );
+			parts[i] = part;
+			int pbars = 1 + part.maxBar(signature);
+
+			int arpStepSize = BlueProg.N_PROG_STEPS / pbars; // Arp step = 1/arpStepSize
+			
+			System.out.println("Part "+i+", "+part.size()+" events "+ pbars+" bars, BlueArp step size = 1/"+arpStepSize);
+			
+			part.dump(midiParser.getSignature());
+			
+			BlueProg bluep = new BlueProg();
+			bluep.convertFrom( part, signature );
+			
+		}
 	}
 
 	

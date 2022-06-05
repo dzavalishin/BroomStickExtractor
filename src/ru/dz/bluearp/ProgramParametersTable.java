@@ -40,7 +40,7 @@ public class ProgramParametersTable extends BlueParametersTable implements BlueD
 			  new ParamInfo_t(  0,     127,     1,      0,    0,    5,    "Input rng wrap (low)",     -1,  cInt8,  "" ),   // 63: cInRangeWrap_Low
 			  new ParamInfo_t(  0,     127,     1,    127,  127,    2,    "Input rng wrap (high)",    -1,  cInt8,  "" ),   // 64: cInRangeWrap_High
 			  new ParamInfo_t(  0,       1,     1,      0,    0,    1,    "Polyphonic octave",         2,  cInt8,  "" ),   // 65: cPolyOctave
-			  new ParamInfo_t(  0,       1,     1,      0,    0,    1,    "Polyphonic key sel.",       2,  cInt8,  "" ),   // 66: cPolyKeySel
+			  new ParamInfo_t(  0,       1,     1, /*0*/1,    0,    1,    "Polyphonic key sel.",       2,  cInt8,  "" ),   // 66: cPolyKeySel
 			  new ParamInfo_t(  0,       2,     1,      0,    0,    1,    "Missing key octave",       26,  cInt8,  "" ),   // 67: cMissing_key_oct
 			  new ParamInfo_t(  0,       4,     1,      0,    0,    2,    "Selected layer",            0,  cInt8,  "" ),   // 68: cSelectedLayer
 			  new ParamInfo_t(  0,       1,     1,      0,    0,    1,    "GATE lane mode",            0,  cInt8,  "" ),   // 69: cGateLaneMode

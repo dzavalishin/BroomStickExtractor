@@ -23,7 +23,13 @@ public class MidiNoteSpan extends GenericNote
 			throw new RuntimeException("note span must start at note on");
 	}
 	
-	// TODO we lose off velocity
+	public MidiNoteSpan(MidiNoteSpan s) {
+		super(new GenericNote(s));
+		startTick = s.startTick;
+		endTick = s.endTick;
+	}
+
+	// TODO we lose not off velocity
 	public void setEndTick(long tick) {
 		endTick = tick;		
 	}
@@ -35,6 +41,30 @@ public class MidiNoteSpan extends GenericNote
 	public long getTicks() { checkComplete(); return endTick - startTick; }
 
 	public long getStartTick() { return startTick; }
+
+	public void shiftLeftBars(int bars, MidiSignature sig) 
+	{
+		checkComplete();
+		
+		int tickPerBar = sig.getTicksPerBar();
+		
+		startTick -= (bars * tickPerBar);
+		endTick -= (bars * tickPerBar);
+	}
+
+	
+	/**
+	 * Get semitone difference of this note to C2 (note C of 2nd octave)
+	 * @return
+	 */
+	public int getNoteDiffToC() {
+		// note value itself is difference to C, so we need just add an octave
+		// our octave value of '3' equals to Cubase's 2nd octave for some reason
+		
+		int oct = getOctave() - 1;
+		
+		return getNote() + (2-oct) * 12;
+	}
 
 
 }

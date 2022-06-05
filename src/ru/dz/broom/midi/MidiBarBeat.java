@@ -9,6 +9,9 @@ public class MidiBarBeat {
 	/** Extra ticks of this event */
 	private int extraTicks;
 	private int sliceSize;
+	
+	private long tick;
+	private MidiSignature sig;
 
 	/**
 	 * 
@@ -21,7 +24,9 @@ public class MidiBarBeat {
 	 */
 	
 	public MidiBarBeat(long tick, int beatDenominator, MidiSignature sig) {
-		sliceSize = beatDenominator; 
+		this.tick = tick;
+		sliceSize = beatDenominator;
+		this.sig = sig; 
 
 		/*
 		int ticksPerSlice = sig.getTicksPerBeat() / sig.getN32PerBeat();
@@ -66,4 +71,14 @@ public class MidiBarBeat {
 		return bar;
 	}
 	
+	/**
+	 * 
+	 * @param denominator
+	 * @return beat number starting from track start in 1/denominator steps.
+	 * 
+	 * /
+	public int getLinearBeat(int denominator)
+	{
+		
+	} */
 }
