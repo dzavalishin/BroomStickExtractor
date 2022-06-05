@@ -198,4 +198,8 @@ public class BlueProg
 		this.name = name;		
 	}
 
+	public void setNumberOfSteps(int nSteps)
+	{
+		param.setNumberOfSteps(nSteps);
+	}
 }

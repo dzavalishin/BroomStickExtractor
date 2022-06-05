@@ -224,6 +224,7 @@ public class MidiTrackParser
 			
 			
 			bluep.setName( midiParser.getPresetName() + "/" + name + "/" + i );
+			bluep.setNumberOfSteps( BlueProg.N_PROG_STEPS );
 			
 			midiParser.registerBlueArpProgram(bluep);
 			

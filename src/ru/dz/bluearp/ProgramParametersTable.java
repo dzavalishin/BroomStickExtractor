@@ -102,6 +102,13 @@ public class ProgramParametersTable extends BlueParametersTable implements BlueD
 			  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 125: - unused -
 			  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 126: - unused -
 			  new ParamInfo_t(  0,       0,     1,      0,    0,    0,    "",                          0,  cInt8,  "" ),   // 127: - unused -
-		};	
+		};
+
+	
+	// TODO offsets hardcoded?
+	
+	public void setNumberOfSteps(int nSteps) {
+		contents[1] = (byte) nSteps;		
+	}	
 	
 }

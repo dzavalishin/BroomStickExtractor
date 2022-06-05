@@ -11,7 +11,6 @@ import ru.dz.broom.midi.MidiNoteSpan;
  */
 public class ArpStep 
 {
-
 	private int scaleStep;
 	private int octave;
 	//private int parm2;
@@ -23,7 +22,7 @@ public class ArpStep
 	public ArpStep() {
 		// TODO Auto-generated constructor stub
 		octave = 8;
-		type = 2; // default entry is rest
+		type = 0; // default entry is off
 		key = 4;
 	}
 	
