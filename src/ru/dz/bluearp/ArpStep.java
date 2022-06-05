@@ -32,7 +32,8 @@ public class ArpStep
 		key = 4; // k1
 		velocity = note.getVelocity();
 		scaleStep = note.getNoteDiffToC();
-		// TODO 
+		// TODO
+		System.out.printf("Note %s step %d\n", note, scaleStep);
 	}
 
 	public void loadBinary(int stepType, byte val) 

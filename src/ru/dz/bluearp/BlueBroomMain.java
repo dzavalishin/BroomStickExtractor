@@ -17,6 +17,8 @@ public class BlueBroomMain
 	private static final String VST3_FILE = "bluearp/dzBlueArpTest.vstpreset";
 	private static final String VST3_SUFFIX = ".vstpreset";
 	
+	private static final String VST3_REAL = "C:/Users/dz/Documents/VST3 Presets/omg-instruments/BlueARP/Classic_Disco.mid.vstpreset"; 
+	
 
 	
 	public static void main(String[] args)  
@@ -38,9 +40,13 @@ public class BlueBroomMain
 			MidiParser mp = new MidiParser(MIDI_FILE);
 			mp.dump();
 			
-			BlueBank bb = new BlueBank();
+			//BlueBank bb = new BlueBank();
 			
-			/*VST3Writer viw = */new VST3Writer(bb, MIDI_FILE+VST3_SUFFIX);
+			BlueBank bb = mp.getBlueArpBank();
+			
+			new VST3Writer(bb, VST3_REAL);
+			/*VST3Writer viw = */
+			//new VST3Writer(bb, MIDI_FILE+VST3_SUFFIX);
 			
 			
 		} catch (IOException e) {

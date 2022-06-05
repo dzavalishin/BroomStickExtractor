@@ -10,6 +10,9 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
 
+import ru.dz.bluearp.BlueBank;
+import ru.dz.bluearp.BlueProg;
+
 public class MidiParser 
 {
 	private Sequence sequence;
@@ -89,6 +92,20 @@ public class MidiParser
 
 	public int getResolution() {
 		return resolution;
+	}
+
+	
+	private BlueBank bb = new BlueBank();
+	int nextBBProgram = 0;
+
+	public void registerBlueArpProgram(BlueProg bluep) {
+		System.out.println("Set BlueArp program "+nextBBProgram);
+		bb.setProgram(nextBBProgram++, bluep);
+	}
+
+
+	public BlueBank getBlueArpBank() {
+		return bb;
 	}
 
 

@@ -61,9 +61,9 @@ public class MidiNoteSpan extends GenericNote
 		// note value itself is difference to C, so we need just add an octave
 		// our octave value of '3' equals to Cubase's 2nd octave for some reason
 		
-		int oct = getOctave() - 1;
+		int oct = getOctave() - 3;
 		
-		return getNote() + (2-oct) * 12;
+		return getNote() + oct * 12;
 	}
 
 

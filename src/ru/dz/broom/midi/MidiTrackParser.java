@@ -225,6 +225,8 @@ public class MidiTrackParser
 			
 			bluep.setName( midiParser.getPresetName() + "/" + name + "/" + i );
 			
+			midiParser.registerBlueArpProgram(bluep);
+			
 			bluep.dump();
 		}
 	}

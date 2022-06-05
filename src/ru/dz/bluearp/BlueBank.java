@@ -211,6 +211,16 @@ public class BlueBank
 		writeTo(bos);
 		
 		return storeBos.toByteArray();
+	}
+
+
+
+
+	public void setProgram(int programNumber, BlueProg program) {
+		if(programs.size() < programNumber+1)
+			programs.add(program);
+		else
+			programs.set(programNumber, program);		
 	}	
 	
 }
