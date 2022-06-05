@@ -74,4 +74,8 @@ public class MidiNote
 		return String.format("%-2s%d  ch %2d vel %3d%s", getNoteName(), octave, getChannel(), velocity, off );
 	}
 
+	public String toShortString() {		
+		String off = isOff() ? " off" : "";
+		return String.format("%-2s%d%s", getNoteName(), octave, off );
+	}
 }

@@ -66,42 +66,43 @@ public class MidiParser
 		for (int i=0; i < track.size(); i++) 
 		{ 
 			MidiEvent event = track.get(i);
-			printMidiEvent(event);
+			parseMidiEvent(event);
 		}
 
 		System.out.println();
 	}
 
 	
-	private static void printMidiEvent(MidiEvent event) 
+	private static void parseMidiEvent(MidiEvent event) 
 	{
-		//if(printDetails) System.out.print("@" + event.getTick() + " ");
 		MidiMessage message = event.getMessage();
 		
 		if (message instanceof ShortMessage) 
-		{
-			ShortMessage sm = (ShortMessage) message;
-			//if(printDetails) System.out.print("Channel: " + sm.getChannel() + " ");
-			if (sm.getCommand() == MidiDefs.NOTE_ON) {
-				if(printDetails) printMidiNote(sm,"on",event);
-				else printMidiNoteShort(sm);
-			} else if (sm.getCommand() == MidiDefs.NOTE_OFF) {
-				if(printDetails && printOff) printMidiNote(sm,"off",event);
-			} else {
-				System.out.println("Command:" + sm.getCommand());
-			}
-			
-		} else if (message instanceof MetaMessage) { 
-			MetaMessage mm = (MetaMessage) message;
-			printMidiMeta(mm);
-		} 
+			parseShortMessage(event, (ShortMessage) message);						
+		else if (message instanceof MetaMessage)  
+			parseMidiMeta((MetaMessage) message);		 
 		else {
 			System.out.println("Other message: " + message.getClass()+" = '"+message.toString()+"'");
 		}
 	}
 
 
-	private static void printMidiMeta(MetaMessage mm) 
+	private static void parseShortMessage(MidiEvent event, ShortMessage sm) {
+		switch(sm.getCommand())
+		{
+		case MidiDefs.NOTE_ON:
+		case MidiDefs.NOTE_OFF:
+			parseMidiNote(sm,event);
+			break;
+						
+		default:
+			System.out.println("Command:" + sm.getCommand());
+			break;
+		}
+	}
+
+
+	private static void parseMidiMeta(MetaMessage mm) 
 	{
 		final byte[] b = mm.getData();
 		
@@ -157,55 +158,23 @@ public class MidiParser
 	}
 
 
-	private static void printMidiNote(ShortMessage sm, String msg, MidiEvent event) 
+	private static void parseMidiNote(ShortMessage sm, MidiEvent event) 
 	{
-		/*
-		int key = sm.getData1();
-		int octave = (key / 12)-1;
-		int note = key % 12;
-		String noteName = MidiDefs.NOTE_NAMES[note];
-		int velocity = sm.getData2();
-		*/
-		
-		MidiNote n = new MidiNote(sm);
+		MidiNote note = new MidiNote(sm);
 		
 		if( !printOff ) 
-			if (n.isOff())	
-				return;
-		
-		
-		
-		//System.out.print("@" + event.getTick() + " ");
-		//System.out.print("@" + tickToMeasure(event.getTick()) + " ");
-		
-		/*
-		System.out.print( tickToMeasure(event.getTick()) + " ");
-		System.out.print("Channel: " + sm.getChannel() + " ");
-		System.out.println("Note "+msg+", " + noteName + octave + " key=" + key + " velocity: " + velocity);
-		*/
-		
+			if (note.isOff())	
+				return;		
 		
 		//String ttm = tickToMeasure(event.getTick());
 		String ttm = tickTo32nd(event.getTick());
-		/*
-		if( !printOff )
-			System.out.printf("%10s ch %2d  %-2s%d  vel %3d\n", ttm, sm.getChannel(), noteName, octave, velocity );
-		else
-			System.out.printf("%10s ch %2d  note %-3s %-2s%d  vel %3d\n", ttm, sm.getChannel(), msg, noteName, octave, velocity );
-			*/
 		
-		System.out.printf("%10s %s\n", ttm, n.toString() );
+		if(printDetails)
+			System.out.printf("%10s %s\n", ttm, note.toString() );
+		else
+			System.out.print(note.toShortString() + " ");
 	}
 
-	private static void printMidiNoteShort(ShortMessage sm) 
-	{
-		int key = sm.getData1();
-		int octave = (key / 12)-1;
-		int note = key % 12;
-		String noteName = MidiDefs.NOTE_NAMES[note];
-	
-		System.out.print(noteName + octave + " ");
-	}
 	
 	
 	private static String tickToMeasure(long tick)
