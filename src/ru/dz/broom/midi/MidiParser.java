@@ -17,6 +17,7 @@ public class MidiParser
 	private String presetName = "(unnamed)";
 	
 	private List<MidiTrackParser> tracks = new ArrayList<>();
+	private long tempo;
 	
 	public MidiParser(String midiFile) throws InvalidMidiDataException, IOException {
 		sequence = MidiSystem.getSequence(new File(midiFile));
@@ -66,11 +67,17 @@ public class MidiParser
 	public void dump() 
 	{
 		System.out.println("Preset "+presetName+", "+tracks.size()+" tracks");
+		System.out.println("Signature "+signature+" tempo "+tempo);
 		for( MidiTrackParser t : tracks )
 		{
 			t.dump();
 		}
 		
+	}
+
+
+	public void setTempo(long tempo) {
+		this.tempo = tempo;
 	}
 
 

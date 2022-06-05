@@ -49,11 +49,19 @@ public class MidiSignature {
 	public int getTicksPerBeat()	{	return ticksPerBeat;	}
 	public int getN32PerBeat()	{	return n32PerBeat;		}
 
+	public int getBeatsPerBar()	{	return 32/n32PerBeat;	}
+	public int getTicksPerBar()	{	return ticksPerBeat * (32/n32PerBeat);		}
+	
 	@Override
 	public String toString() {
 		//System.out.print("(signature "+num+"/"+den+", "); 
 		//System.out.print(""+ticks+" ticks/beat, "+n32+"/32 per beat)"); 
-		return ""+numerator+"/"+denominator+", "+ticksPerBeat+" ticks/beat, "+n32PerBeat+"/32 per beat)";
+		//return ""+numerator+"/"+denominator+", "+ticksPerBeat+" ticks/beat, "+n32PerBeat+"/32 per beat";
+
+		//int onePerN = 32/n32PerBeat;		
+		//return ""+numerator+"/"+denominator+", "+ticksPerBeat+" ticks/beat = 1/"+onePerN+", "+;
+
+		return ""+numerator+"/"+denominator+", "+ticksPerBeat+" ticks/beat = 1/"+getBeatsPerBar()+", "+getTicksPerBar()+" ticks/bar";
 	}
 	
 	/*

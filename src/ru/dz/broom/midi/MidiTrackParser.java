@@ -95,17 +95,18 @@ public class MidiTrackParser
 		
 		case 0x51:	
 			long bpm = 60 * 1000 * 1000 / MidiTools.getInt3(mm);
-			System.out.print("(tempo "+bpm+" BPM)"); 
+			//System.out.print("(tempo "+bpm+" BPM)");
+			midiParser.setTempo(bpm);
 			break;
 		
 		case 0x58:	
 			MidiSignature ms = new MidiSignature(mm);			
-			System.out.print(ms.toString()); 
+			if(debugPrint) System.out.print(ms.toString()); 
 			midiParser.setSignature(ms);
 			break;
 		}
 		
-		System.out.println();
+		if(debugPrint) System.out.println();
 		
 		/* TODO
 		 * 
@@ -187,7 +188,8 @@ public class MidiTrackParser
 		if("Metronome".equals(name)) return;
 		if("M/W".equals(name)) return; // mod wheel
 		
-		System.out.println("Track "+name+", "+ss.size()+" events");
+		int bars = ss.maxBar(midiParser.getSignature());
+		System.out.println("Track "+name+", "+ss.size()+" events "+ bars+" bars, "+bars/8+" per part");
 		ss.dump(midiParser.getSignature());
 
 		

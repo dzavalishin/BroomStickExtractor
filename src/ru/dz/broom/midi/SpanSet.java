@@ -37,8 +37,21 @@ public class SpanSet {
 		});
 		
 	}
-	
-	
+
+	int maxBar(MidiSignature sig)
+	{
+		int [] maxBar = {-1};
+		spans.forEach( (tk,s) -> {
+			MidiBarBeat mbb = new MidiBarBeat(tk.getTick(),32,sig); 
+			//System.out.println("Span "+s+" @"+mbb);
+			//System.out.println(""+s+" @"+mbb);
+			
+			maxBar[0] = Math.max(maxBar[0], mbb.getBar());
+
+		});
+		
+		return maxBar[0];
+	}
 	
 }
 

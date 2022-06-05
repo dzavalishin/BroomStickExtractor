@@ -3,9 +3,9 @@ package ru.dz.broom.midi;
 public class MidiBarBeat {
 
 	/** Bar of this event */
-	private int bars;
+	private int bar;
 	/** Beat of this event */
-	private int beats;
+	private int beat;
 	/** Extra ticks of this event */
 	private int extraTicks;
 	private int sliceSize;
@@ -23,6 +23,7 @@ public class MidiBarBeat {
 	public MidiBarBeat(long tick, int beatDenominator, MidiSignature sig) {
 		sliceSize = beatDenominator; 
 
+		/*
 		int ticksPerSlice = sig.getTicksPerBeat() / sig.getN32PerBeat();
 		
 		ticksPerSlice *= 32;
@@ -32,8 +33,24 @@ public class MidiBarBeat {
 		extraTicks = (int) (tick % ticksPerSlice);
 		
 		
-		bars = (int) (slices/sliceSize);
-		beats= (int) (slices%sliceSize);
+		bar  = (int) (slices/sliceSize);
+		beat = (int) (slices%sliceSize);
+		*/
+		
+		bar    = (int) (tick / sig.getTicksPerBar());
+		int be = (int) (tick % sig.getTicksPerBar());
+		
+		/*
+		int tpb = sig.getTicksPerBeat();
+		
+		tpb *= sig.getBeatsPerBar();
+		tpb /= sliceSize;
+		*/
+		
+		int tpb = sig.getTicksPerBar() / sliceSize;
+		
+		beat       = (int) (be / tpb);
+		extraTicks = (int) (be % tpb);
 	}
 	
 	
@@ -41,7 +58,12 @@ public class MidiBarBeat {
 	public String toString() {
 		String extra = (extraTicks != 0) ? (" (+" +extraTicks+")") : "";
 
-		return String.format("%3d.%2d /%d %6s", bars, beats, sliceSize, extra );
+		return String.format("%3d.%2d /%d %6s", bar, beat, sliceSize, extra );
+	}
+
+
+	public int getBar() {
+		return bar;
 	}
 	
 }
