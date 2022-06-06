@@ -89,4 +89,19 @@ chns - chain steps, это вот эти параметры
   { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_06",             17,  cInt8,  "" },   // 36: cChainSeq[5]
   { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_07",             17,  cInt8,  "" },   // 37: cChainSeq[6]
   { -1,  maxPrg,     1,     -1,   -1,    4,    "ChainProg_08",             17,  cInt8,  "" },   // 38: cChainSeq[7]
-  
+
+
+
+
+## BB articulations
+
+While composing the built in MIDI styles, we used different MIDI channels to access the various articulations. Here's the full list:
+
+Ch 1: Normal
+Ch 2: Staccato
+Ch 3: Slide down
+Ch 4: Hammer On / Pull Off
+Ch 5: Slide up
+Ch 6: Legato
+(Ch 10: Play the internal, crappy drum sounds)  
+

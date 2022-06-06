@@ -18,12 +18,12 @@ public class BlueBroomMain
 {
 	//private static final String MIDI_FILE = "G:\\Projects\\BroomStickExtractor\\midi\\Disco_Octaves.mid";
 	//private static final String MIDI_FILE = "midi/Disco_Octaves.mid";
-	private static final String MIDI_FILE = "midi/Classic_Disco.mid";
-	private static final String FXP_FILE = "bluearp/BlueARP_FactoryBank.fxb";
-	private static final String VST3_FILE = "bluearp/dzBlueArpTest.vstpreset";
+	//private static final String MIDI_FILE = "midi/Classic_Disco.mid";
+	//private static final String FXP_FILE = "bluearp/BlueARP_FactoryBank.fxb";
+	//private static final String VST3_FILE = "bluearp/dzBlueArpTest.vstpreset";
 	private static final String VST3_SUFFIX = ".vstpreset";
 	
-	private static final String VST3_REAL = "C:/Users/dz/Documents/VST3 Presets/omg-instruments/BlueARP/Classic_Disco.mid.vstpreset";
+	//private static final String VST3_REAL = "C:/Users/dz/Documents/VST3 Presets/omg-instruments/BlueARP/Classic_Disco.mid.vstpreset";
 	private static final String VST3_USER_DIR = "C:/Users/dz/Documents/VST3 Presets/omg-instruments/BlueARP"; 
 	
 
@@ -81,6 +81,7 @@ public class BlueBroomMain
 		
 		Path mfn = mpt.getFileName();
 		Path vpt = Paths.get(VST3_USER_DIR, mfn.toString() + VST3_SUFFIX );
+		Path fpt = Paths.get("bluearp", mfn.toString() + ".fxb" );
 
 		System.out.printf("Will convert '%s' to '%s'\n", mpt, vpt );
 		
@@ -90,6 +91,11 @@ public class BlueBroomMain
 		
 		
 		new VST3Writer(bb, vpt.toString());
+		
+		BlueFxp fxb = new BlueFxp();
+		fxb.setBank(bb);
+		fxb.save(fpt.toString());
+
 	}
 
 	private static void testProcess() throws InvalidMidiDataException, IOException {
@@ -106,6 +112,7 @@ public class BlueBroomMain
 		//fxp.save(FXP_FILE+".new");
 		
 
+		/*
 		MidiParser mp = new MidiParser(MIDI_FILE);
 		mp.convert();
 		

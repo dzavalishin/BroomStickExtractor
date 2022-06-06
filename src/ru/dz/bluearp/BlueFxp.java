@@ -36,6 +36,7 @@ public class BlueFxp
 	private BlueBank bank = new BlueBank();
 	
 	public BlueBank getBank() {		return bank;	}
+	public void setBank(BlueBank bb) {		bank = bb;	}
 	
 	/**
 	 * 
@@ -113,6 +114,7 @@ public class BlueFxp
 	 
 		BinFileIO.writeIntLE(dos, chunk_size);         		// chunk size (dummy2)
 	}
+
 	
 	/*
 	private void FxbWriteHeader_UpdateSize(RandomAccessFile dos, int chunk_size) throws IOException
