@@ -151,30 +151,35 @@ public class BlueProg
 		return data;
 	}
 
-	public void convertFrom(SpanSet part, MidiSignature signature) 
+	/**
+	 * 
+	 * Create BlueArp program from MIDI piano roll, which SpanSet actually is.
+	 * 
+	 * @param part MIDI part to get notes from.
+	 * @param signature MIDI part timing info.
+	 * @param hasNoteOverlaps Has more than one note at some time.
+	 * 
+	 */
+	
+	public void convertFrom(SpanSet part, MidiSignature signature, boolean hasNoteOverlaps) 
 	{
 		int pbars = 1 + part.maxBar(signature);
 
 		int arpStepSize = BlueProg.N_PROG_STEPS / pbars; // Arp step = 1/arpStepSize
-
+		// TODO set our step size
+		
 		int stepTicks = signature.getTicksPerBar() / arpStepSize;		
-
-		int maxExtra[] = {0};
-		int countExtra[] = {0};
 
 		for(int p = 0; p < N_PROG_STEPS; p++)
 			steps[p] = new ArpStep();
 		
+		ExtraCounter extraCounter = new ExtraCounter();
 		
 		part.forEach(signature, (mbb, note) -> {
 			int pos = (int) (note.getStartTick() / stepTicks);
 			int extraTicks = (int) (note.getStartTick() % stepTicks);
 			
-			if(extraTicks != 0)
-			{
-				maxExtra[0] = Math.max(maxExtra[0], extraTicks);
-				countExtra[0]++;
-			}
+			extraCounter.check(extraTicks);
 			
 			if(pos >= N_PROG_STEPS)
 			{
@@ -182,15 +187,15 @@ public class BlueProg
 			}
 			else
 			{
-				steps[pos] = new ArpStep(note);
+				if(hasNoteOverlaps)
+					steps[pos].mergeIn(note); // Do it in polyphonic way
+				else
+					steps[pos] = new ArpStep(note); // Do it in monophonic way
 			}
 			
 		} );
 		
-		if(countExtra[0] > 0)
-		{
-			System.err.println("Inexact positions for "+countExtra[0]+" steps, max="+maxExtra[0]);
-		}
+		extraCounter.report();
 		
 	}
 
@@ -201,5 +206,36 @@ public class BlueProg
 	public void setNumberOfSteps(int nSteps)
 	{
 		param.setNumberOfSteps(nSteps);
+	}
+}
+
+/**
+ * 
+ * Counts notes that were placed inexactly (earlier tnah in MIDI track).
+ * 
+ * @author dz
+ *
+ */
+
+class ExtraCounter 
+{
+	int maxExtra = 0;
+	int countExtra = 0;
+
+	void check(int extraTicks)
+	{
+		if(extraTicks != 0)
+		{
+			maxExtra = Math.max(maxExtra, extraTicks);
+			countExtra++;
+		}		
+	}
+
+	public void report() 
+	{
+		if(countExtra > 0)
+		{
+			System.err.println("Inexact positions for "+countExtra+" steps, max="+maxExtra);
+		}
 	}
 }

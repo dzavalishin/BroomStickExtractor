@@ -13,6 +13,7 @@ public class MidiNoteSpan extends GenericNote
 {
 	private long startTick = -1;
 	private long endTick = -1;
+	private int blueKey; // polyphonic key (K1..K5) number for BlueArp
 	
 	public MidiNoteSpan(MidiNote note, long startTick) {
 		super(note);
@@ -66,5 +67,7 @@ public class MidiNoteSpan extends GenericNote
 		return getNote() + oct * 12;
 	}
 
+	public void setBlueKey(int blueKey) {		this.blueKey = blueKey;	}
+	public int getBlueKey() {		return blueKey;	}
 
 }

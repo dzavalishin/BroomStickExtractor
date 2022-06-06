@@ -217,8 +217,7 @@ public class MidiTrackParser
 		
 		//ss.dump(midiParser.getSignature());
 
-		if(hasNoteOverlaps)
-			throw new RuntimeException("hasNoteOverlaps");
+		//if(hasNoteOverlaps)			throw new RuntimeException("hasNoteOverlaps");
 		
 		SpanSet[] parts = new SpanSet[VARIATIONS]; 
 		for(int i = 0; i < VARIATIONS; i++)
@@ -233,8 +232,11 @@ public class MidiTrackParser
 			
 			//part.dump(midiParser.getSignature());
 			
+			if(hasNoteOverlaps)
+				part.assignNotesToKeys();
+			
 			BlueProg bluep = new BlueProg();
-			bluep.convertFrom( part, signature );
+			bluep.convertFrom( part, signature, hasNoteOverlaps );
 			
 			
 			bluep.setName( midiParser.getPresetName() + "/" + name + "/" + i );
