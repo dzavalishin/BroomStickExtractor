@@ -218,6 +218,7 @@ public class MidiTrackParser
 		//ss.dump(midiParser.getSignature());
 
 		//if(hasNoteOverlaps)			throw new RuntimeException("hasNoteOverlaps");
+		hasNoteOverlaps = false; // TODO check me pretend we are mono - it seems that poly detection is too sensitive
 		
 		SpanSet[] parts = new SpanSet[VARIATIONS]; 
 		for(int i = 0; i < VARIATIONS; i++)

@@ -34,9 +34,9 @@ public class BlueBroomMain
 			//processFile("midi/Disco_Sole.mid");
 			//processFile("midi/Room4aKick.mid"); 
 			
-			processFile("midi/70s_Dim_Bouncer.mid");
+			//processFile("midi/70s_Dim_Bouncer.mid");
 			//processFile("midi/Aggression.mid");			
-			//processFile("midi/In10CT.mid");
+			processFile("midi/In10CT.mid");
 			
 			
 			
