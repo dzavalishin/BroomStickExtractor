@@ -72,14 +72,14 @@ public class MidiParser
 	public void setPresetName(String presetName) {		this.presetName = presetName;	}
 
 
-	public void dump() 
+	public void convert() 
 	{
 		System.out.println("Sequence ticks per beat "+getResolution());
 		System.out.println("Preset "+presetName+", "+tracks.size()+" tracks");
 		System.out.println("Signature "+signature+" tempo "+tempo);
 		for( MidiTrackParser t : tracks )
 		{
-			t.dump();
+			t.convert();
 		}
 		
 	}

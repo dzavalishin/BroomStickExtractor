@@ -73,7 +73,7 @@ public class MidiTrackParser
 
 	private void parseMidiMeta(MetaMessage mm) 
 	{
-		final byte[] b = mm.getData();
+		//final byte[] b = mm.getData();
 		
 		if(debugPrint) System.out.print("Meta message type: " + mm.getType()+" ");
 		switch(mm.getType())
@@ -91,6 +91,14 @@ public class MidiTrackParser
 			}
 			else
 			{
+				// Some files have different track names, unify 'em
+				
+				if("MIDI 01".equals(mmName)) mmName = "Major";
+				if("MIDI 02".equals(mmName)) mmName = "7th";
+				if("MIDI 03".equals(mmName)) mmName = "Minor";
+				
+				if("Min".equals(mmName)) mmName = "Minor";
+				
 				this.name = mmName;
 				if(debugPrint) System.out.print("(track name '"+name+"')");
 			}
@@ -112,7 +120,7 @@ public class MidiTrackParser
 		
 		if(debugPrint) System.out.println();
 		
-		/* TODO
+		/* 
 		 * 
 		Message				Meta type	Data length	Contains	Occurs at
 		Sequence number		0x00	2 bytes		The number of a sequence											At delta time 0
@@ -163,11 +171,11 @@ public class MidiTrackParser
 		{
 			MidiNoteSpan span = playingNotes.get(note.getKey());
 			
-			if(span.getChannel() != note.getChannel())
-				System.err.printf("off for diff channel: %s @%s\n", note.toString(), ttm );
-			
 			if(span != null)
 			{
+				if(span.getChannel() != note.getChannel())
+					System.err.printf("off for diff channel: %s @%s\n", note.toString(), ttm );
+				
 				span.setEndTick(tick);
 				playingNotes.remove(note.getKey());
 				ss.add(span);
@@ -190,12 +198,15 @@ public class MidiTrackParser
 	}
 
 
-	public void dump() 
+	public void convert() 
 	{
 		if(null == name) return; // track 0 is for set up only, no events 
 		
 		if("Metronome".equals(name)) return;
 		if("M/W".equals(name)) return; // mod wheel
+		
+		if("MIDI 04".equals(name)) return; // mod wheel
+		if("MIDI 05".equals(name)) return; // metronome
 		
 		MidiSignature signature = midiParser.getSignature();
 		
@@ -206,6 +217,9 @@ public class MidiTrackParser
 		
 		//ss.dump(midiParser.getSignature());
 
+		if(hasNoteOverlaps)
+			throw new RuntimeException("hasNoteOverlaps");
+		
 		SpanSet[] parts = new SpanSet[VARIATIONS]; 
 		for(int i = 0; i < VARIATIONS; i++)
 		{
@@ -228,7 +242,7 @@ public class MidiTrackParser
 			
 			midiParser.registerBlueArpProgram(bluep);
 			
-			bluep.dump();
+			//bluep.dump();
 		}
 	}
 

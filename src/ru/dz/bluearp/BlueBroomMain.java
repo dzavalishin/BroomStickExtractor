@@ -29,7 +29,15 @@ public class BlueBroomMain
 		try {
 			//testProcess();
 			//processFile("midi/Disco_Octaves.mid");
-			processFile("midi/Classic_Disco.mid");
+			//processFile("midi/Classic_Disco.mid");
+			//processFile("midi/Call_Me_Mad.mid"); 
+			//processFile("midi/Disco_Sole.mid");
+			processFile("midi/Room4aKick.mid"); 
+			
+			//processFile("midi/70s_Dim_Bouncer.mid");
+			//processFile("midi/Aggression.mid");			
+			//processFile("midi/In10CT.mid");
+			
 			
 			
 		} catch (IOException e) {
@@ -50,7 +58,7 @@ public class BlueBroomMain
 		System.out.printf("Will convert '%s' to '%s'\n", mpt, vpt );
 		
 		MidiParser mp = new MidiParser(mpt.toString());
-		mp.dump();		
+		mp.convert();		
 		BlueBank bb = mp.getBlueArpBank();
 		
 		
@@ -72,7 +80,7 @@ public class BlueBroomMain
 		
 
 		MidiParser mp = new MidiParser(MIDI_FILE);
-		mp.dump();
+		mp.convert();
 		
 		//BlueBank bb = new BlueBank();
 		
