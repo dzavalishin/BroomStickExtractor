@@ -50,7 +50,7 @@ public class ArpStep
 		velocity = note.getVelocity();
 		scaleStep = note.getNoteDiffToC();
 		// TODO
-		System.out.printf("Note %s step %d\n", note, scaleStep);
+		//System.out.printf("Note %s step %d\n", note, scaleStep);
 	}
 
 	/**

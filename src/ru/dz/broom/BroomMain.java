@@ -16,8 +16,8 @@ public class BroomMain {
 
 	private static void process(String name) throws IOException 
 	{
-		BroomExtractor e = new BroomExtractor("Z:/tmp/broom/"+name+".bin");
-		e.extract("G:/tmp/Broom/"+name);
+		BroomExtractor e = new BroomExtractor("G:/tmp/broomin/"+name+".bin");
+		e.extract("G:/tmp/broomout/"+name);
 	}
 
 	public static void fail(String msg) 

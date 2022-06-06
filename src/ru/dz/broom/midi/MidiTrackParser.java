@@ -202,11 +202,13 @@ public class MidiTrackParser
 	{
 		if(null == name) return; // track 0 is for set up only, no events 
 		
-		if("Metronome".equals(name)) return;
-		if("M/W".equals(name)) return; // mod wheel
+		if("Metronome".equalsIgnoreCase(name)) return;
+		if("M/W".equalsIgnoreCase(name)) return; // mod wheel
+		if("MW".equalsIgnoreCase(name)) return; // mod wheel
+		if("Mod wheel".equalsIgnoreCase(name)) return; // mod wheel
 		
-		if("MIDI 04".equals(name)) return; // mod wheel
-		if("MIDI 05".equals(name)) return; // metronome
+		if("MIDI 04".equalsIgnoreCase(name)) return; // mod wheel
+		if("MIDI 05".equalsIgnoreCase(name)) return; // metronome
 		
 		MidiSignature signature = midiParser.getSignature();
 		

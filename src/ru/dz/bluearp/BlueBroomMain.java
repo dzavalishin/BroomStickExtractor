@@ -1,8 +1,12 @@
 package ru.dz.bluearp;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import javax.sound.midi.InvalidMidiDataException;
 
@@ -36,17 +40,40 @@ public class BlueBroomMain
 			
 			//processFile("midi/70s_Dim_Bouncer.mid");
 			//processFile("midi/Aggression.mid");			
-			processFile("midi/In10CT.mid");
+			//processFile("midi/In10CT.mid");
 			
+			processDir("midi");
 			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (InvalidMidiDataException e) {
+		} /*catch (InvalidMidiDataException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 	}
+
+
+	private static void processDir(String dir) throws IOException {
+		Files.walkFileTree(Paths.get(dir), new SimpleFileVisitor<Path>() {
+	        @Override
+	        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+	          throws IOException {
+	            if (!Files.isDirectory(file)) {
+	                try {
+						//processFile( file.getFileName().toString() );
+	                	processFile( Paths.get( dir, file.getFileName().toString() ).toString() );
+					} catch (InvalidMidiDataException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            }
+	            return FileVisitResult.CONTINUE;
+	        }
+	    });	}
 
 
 	private static void processFile( String midiFilePath ) throws InvalidMidiDataException, IOException {

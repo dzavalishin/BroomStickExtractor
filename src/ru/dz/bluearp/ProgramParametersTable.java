@@ -28,7 +28,7 @@ public class ProgramParametersTable extends BlueParametersTable implements BlueD
 			  new ParamInfo_t( -3,       3,     1,      0,    0,    1,    "Master transpose oct",     11,  cInt8,  "" ),   // 51: cMTranspose_Oct
 			  new ParamInfo_t(  0,       8,     1,      1,    1,    2,    "Input quantize",            4,  cInt8,  "" ),   // 52: cInQuantize
 			  new ParamInfo_t(-12,      12,     1,      0,    0,    3,    "Master transpose semi",    12,  cInt8,  "" ),   // 53: cMTranspose_Semi
-			  new ParamInfo_t(  0,       1,     1,      0,    0,    2,    "Page scroll",               2,  cInt8,  "" ),   // 54: cAutoScroll
+			  new ParamInfo_t(  0,       1,     1,      1,    0,    2,    "Page scroll",               2,  cInt8,  "" ),   // 54: cAutoScroll
 			  new ParamInfo_t(-50,      50,     1,      0,    0,    1,    "Swing",                     0,  cInt8,  "%" ),  // 55: cSwing
 			  new ParamInfo_t(  0,       3,     1,      0,    0,    2,    "Restart On",               13,  cInt8,  "" ),   // 56: cRestartOn
 			  new ParamInfo_t(  0,      13,     1,      0,    0,    1,    "Force scale: key",         14,  cInt8,  "" ),   // 57: cForceScale_Key
