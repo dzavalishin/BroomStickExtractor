@@ -1,6 +1,8 @@
 # BroomStick Extractor
 Extrcat MIDI and other files from BroomStick Bass resources
 
+Note: https://gitverse.ru/dzavalishin/BroomStickExtractor
+
 # Blue Arp convertor
 
 Convert MIDI patterns to BlueArp patterns. 
